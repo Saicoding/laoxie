@@ -105,6 +105,13 @@ Page({
         self.setData({
           isPlaying: true
         })
+
+        setTimeout(function(){
+          self.setData({
+            show: false
+          })
+        },3000)
+
         break;
       default:
         prompt = code;
@@ -129,6 +136,21 @@ Page({
   toogleShow: function(e) {
     let self = this;
 
+    let show = self.data.show;
+
+    if(!show){
+      let myInterval = self.data.myInterval;
+      clearInterval(myInterval);
+      let interval = setTimeout(function(){
+        self.setData({
+          show:false
+        })
+      },3000)
+      self.setData({
+        myInterval:interval
+      })
+    }
+
     self.setData({
       show:!self.data.show
     })
@@ -139,19 +161,6 @@ Page({
    */
 
   out:function(){
-    wx.navigateBack({
-      
-    })
+    wx.navigateBack({})
   },
-
-  bindFullScreen: function() {
-    let self = this;
-    self.ctx.requestFullScreen({
-      success: (res) => {
-        self.setData({
-          fullScreen: true
-        })
-      }
-    })
-  }
 })
