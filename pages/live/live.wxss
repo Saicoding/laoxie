@@ -23,15 +23,6 @@ live-player {
   margin-top: 155rpx;
 }
 
-.prompt{
-  font-size: 28rpx;
-  width: 100%;
-  height: 50rpx;
-  color:white;
-  text-align: center;
-  line-height: 50rpx;
-  margin-top:120rpx;
-}
 
 .control-up-text {
   border: 4rpx solid white;
@@ -52,7 +43,28 @@ live-player {
 }
 
 .fullScreen-control{
-  width:100%;
-  height:100%;
-  background:red;
+  font-size: 28rpx;
+  color:white;
+  margin-top:120rpx;
+  position: absolute;
+  text-align: center;
+  line-height:750rpx;
+  z-index: 800;
+}
+
+.model{
+  font-size: 28rpx;
+  color:white;
+  margin-top:120rpx;
+  position: absolute;
+  line-height:750rpx;
+  z-index: 801;
+  background: radial-gradient(rgba(0, 0, 0, 1) 60%, rgba(0, 0, 0, 0.3) 40%); /* 标准的语法 */
+}
+
+.back{
+  width:40rpx;
+  height:40rpx;
+  transform:rotate(90deg);
+  margin-left:680rpx;
 }

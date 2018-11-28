@@ -45,25 +45,25 @@ Page({
           isLiving:true,
           pastVideos: pastVideos
         })
-      })
 
-      //得到消息数目
-      let url = encodeURIComponent('/pages/index/index');
-      app.post(API_URL, "action=GetNoticesNums&LoginRandom=" + LoginRandom + "&zcode=" + zcode, false, true, "", url).then((res) => {
-        let nums = res.data.nums;
+        //得到消息数目
+        let url = encodeURIComponent('/pages/index/index');
+        app.post(API_URL, "action=GetNoticesNums&LoginRandom=" + LoginRandom + "&zcode=" + zcode, false, true, "", url).then((res) => {
+          let nums = res.data.nums;
 
-        if (nums > 0) {
-          nums = nums.toString();
-          wx.setTabBarBadge({
-            index: 2,
-            text: nums,
-          })
-        } else {
-          wx.setTabBarBadge({
-            index: 2,
-            text: "",
-          })
-        }
+          if (nums > 0) {
+            nums = nums.toString();
+            wx.setTabBarBadge({
+              index: 2,
+              text: nums,
+            })
+          } else {
+            wx.setTabBarBadge({
+              index: 2,
+              text: "",
+            })
+          }
+        })
       })
     } else {
       let url = encodeURIComponent('/pages/index/index');
