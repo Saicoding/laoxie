@@ -1,0 +1,62 @@
+/* pages/mine/message/message.wxss */
+
+.body-container{
+  padding:40rpx 30rpx 40rpx 30rpx;
+}
+
+.myscroll{
+
+}
+
+.block{
+  height:100rpx;
+  width:100%;
+  border-bottom:1rpx solid #ebebeb;
+  line-height: 100rpx;
+
+}
+
+.left-dot,.mytext,.time,.right-img{
+  display: float;
+  float:left;
+}
+
+.left-dot{
+  width:20rpx;
+  height:20rpx;
+  border-radius: 20rpx;
+  margin-top:40rpx;
+  margin-left:30rpx;
+}
+
+.mytext{
+  font-size:33rpx;
+  color:black;
+  margin-left:30rpx;
+  width:370rpx;
+  overflow-x: hidden;
+}
+
+.right-img{
+  width:18rpx;
+  height:18rpx;
+  margin-top:45rpx;
+  margin-left:5rpx;
+}
+
+.time{
+  font-size:33rpx;
+  color:black;
+  width:160rpx;
+  margin-left:30rpx;
+  overflow-x: hidden;
+}
+
+.detail{
+  clear: both;
+  font-size:30rpx;
+  padding-left:70rpx;
+  padding-right:50rpx;
+  padding-bottom: 30rpx;
+  line-height:50rpx;
+}

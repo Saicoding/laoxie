@@ -1,0 +1,23 @@
+<live-player data-component="live" class="live" bindtap="toogleShow" id="player" src="rtmp://play01.chinaplat.com/live/{{sign}}" mode="RTC" autoplay bindstatechange="statechange" binderror="error" />
+<!-- 控制条 -->
+<cover-view data-component="control" bindtap="toogleShow" class="control" >
+  <cover-view class="control-up">
+    <cover-view class="control-up-text">高清</cover-view>
+  </cover-view>
+
+  <cover-view class="prompt">
+    {{prompt}}
+  </cover-view>
+
+  <cover-view class="control-down">
+    <cover-image bindtap="bindPlay" wx:if="{{!isPlaying}}" class="control-button" src="/imgs/play.png" mode="aspectFit"></cover-image>
+    <cover-image bindtap="bindPause" wx:if="{{isPlaying}}" class="control-button" src="/imgs/pause.png" mode="aspectFit"></cover-image>
+    <cover-image bindtap="bindResume" class="control-button" src="/imgs/flush.png" mode="aspectFit"></cover-image>
+    <cover-image bindtap="bindFullScreen" style="margin-left:570rpx;" class="control-button" src="/imgs/fullScreen.png" mode="aspectFit"></cover-image>
+  </cover-view>
+</cover-view>
+
+<cover-view class ="fullScreen-control">
+  测试
+</cover-view>
+

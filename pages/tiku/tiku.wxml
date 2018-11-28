@@ -1,0 +1,4 @@
+<!--pages/tiku/tiku.wxml-->
+<view wx:if="{{!isHasShiti}}">
+  <hasNoPage str="开发中,请稍后..."></hasNoPage>
+</view>

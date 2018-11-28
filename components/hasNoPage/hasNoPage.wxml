@@ -1,0 +1,9 @@
+<!--components/hasNoPage/hasNoPage.wxml-->
+<view class = "container">
+  <view class = "container-img">
+    <image src = "/imgs/jieAnswerAll.jpg" mode='aspectFit'></image>
+  </view>
+  <view class = "text">
+    {{str}}
+  </view>
+</view>

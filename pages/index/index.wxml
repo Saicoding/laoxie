@@ -1,0 +1,34 @@
+<view class="page-body">
+  <!-- 默认图片 -->
+  <view wx:hidden='{{isLiving}}' bindtap='goLiveDetail'>
+    <image class="live-show" src="{{img}}" mode="aspectFit"></image>
+    <image class="live-play" src="/imgs/play1.png" mode="aspectFit"></image>
+    <view class="live-bottom" style=" background: linear-gradient(to top, black,rgb(170, 170, 170) );opacity: 0.5;"> </view>
+    <view class="live-bottom">
+      <view class="text1">{{title}}</view>
+      <view class="text2">{{starttime}}</view>
+    </view>
+  </view>
+
+  <!-- 往期回顾 -->
+  <view class ="past">
+    <image class ="past-img" src = "/imgs/video.png" mode = "aspectFit"></image>
+    <view class ="past-text">往期回顾</view>
+  </view>
+
+  <scroll-view scroll-y style="height:{{windowHeight-552}}rpx"  class ="list">
+    <view wx:if = "{{pastVideos.length>0}}">
+      <view wx:for = "{{pastVideos}}" wx:for-item = "video" wx:key ="v">
+        <view data-title = "{{video.title}}" data-videoUrl ="{{video.video}}" bindtap ="watchPast" class ="video">
+          <image class ="video-img-big" src ="{{video.img}}" mode = "aspectFit"></image>
+          <image class ="video-img-small" src ="/imgs/play1.png" mode = "aspectFit"></image>
+          <view class ="time">{{video.timeStr}}</view>
+          <view class ="video-title">{{video.title}}</view>
+        </view>
+      </view>
+    </view>
+    <view class = "hasNoVideo" style="height:{{windowHeight-522}}rpx" wx:if = "{{pastVideos.length ==0}}">
+      暂时没有往期直播视频
+    </view>
+  </scroll-view>
+</view>
