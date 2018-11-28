@@ -1,4 +1,89 @@
-<!--pages/tiku/tiku.wxml-->
-<view wx:if="{{!isHasShiti}}">
-  <hasNoPage str="开发中,请稍后..."></hasNoPage>
+<view class="index-top">
+  <picker range="{{array}}" range-key="title" class='picker changeType' value="{{Index}}" bindchange="bindPickerChange" data-selecthx="{{array[index].title}}">
+    <image src="/imgs/dingwei1.png" class="dingwei" mode="aspectFit"></image>
+    <text class='mulu'>当前题库</text>
+    <view value="{{index}}">
+      {{array[index].title}}>
+    </view>
+  </picker>
+
+  <view class='shiti_index'>
+    <view class='t_left'>
+      <view class='ti_z1' bindtap="GOMarkExercise">
+        <image class="ti_img" src="/imgs/mark_exersise.jpg" mode="aspectFit"></image>
+        <view class='t_text'>收藏练习</view>
+      </view>
+      <view class='ti_z2' data-ti="model" bindtap="GOModelReal">
+        <image class="ti_img" src="/imgs/zhenti.jpg" mode="aspectFit"></image>
+        <view class='t_text'>模拟真题</view>
+      </view>
+    </view>
+    <view class='t_right'>
+      <view class='ti_z3' bindtap="GOAnswerWrong">
+        <image class="ti_img" src="/imgs/my_error.jpg" mode="aspectFit"></image>
+        <view class='t_text'>我的错题</view>
+      </view>
+      <view class='ti_z4'>
+        <image class="ti_img" data-ti="yati" bindtap="GOModelReal" src="/imgs/yati.jpg" mode="aspectFit"></image>
+        <view class='t_text'>考前押题</view>
+      </view>
+    </view>
+    <view class='t_center' bindtap="GOkaoqianmiji">
+      <view class="center-block">
+        <view class="center-text" style="margin-top:70rpx;font-size:40rpx;letter-spacing:2rpx;">考前秘笈</view>
+        <view class="center-text" style="margin-top:20rpx;font-size:25rpx;">敲黑板/划重点</view>
+      </view>
+    </view>
+  </view>
+  <view class="wave1">
+  </view>
+  <view class="wave2">
+  </view>
+  <view class='shiti_zhangjie'>
+    章节目录
+  </view>
+  <!-- <button bindtap='test'>测试</button> -->
+
 </view>
+
+<view class="zhangjie">
+  <scroll-view wx:if="{{isLoaded}}" style="height:{{scrollHeight}}rpx;" scroll-y="true" scroll-top="{{scroll}}">
+    <view style="border:1rpx solid white;">
+      <view wx:for="{{zhangjie}}" wx:key="navItems" wx:for-item="item" wx:for-index="itemIdx">
+        <!-- 如果是展开状态才显示线条 -->
+
+
+        <view data-itemIdx="{{itemIdx}}" id='{{item.id}}' bindtap="onTapZhangjie" class="block" hover-start-time="100" hover-class="select">
+          <image wx:if="{{item.hasChild}}" class="zhang-icon" src="{{item.isFolder && !item.display?'/imgs/folder.png':'/imgs/unfolder.png'}}"></image>
+
+          <view class='title' id='{{item.id}}' style="color:{{item.isAnswerAll?'#9D9D9D':'black'}}">
+            {{item.title}}
+          </view>
+
+          <view class="answer_number">
+            {{item.zhang_answer_num}}/{{item.nums}}
+          </view>
+        </view>
+
+        <view class="jie" animation="{{!item.isFolder?item.spreadData:item.folderData}}">
+          <view wx:for="{{item.zhangjie_child}}" wx:for-item="items" wx:for-index="jieIdx" wx:key="navItems">
+            <view data-itemIdx="{{itemIdx}}" data-jieIdx="{{jieIdx}}" id='{{items.id}}' bindtap="GOzuoti" class='jie_block' hover-start-time="100" hover-class="select">
+              <view class="jie_title" style="color:{{items.isAnswerAll?'#9D9D9D':'black'}}">{{items.title}}</view>
+              <view class="answer_number">
+                {{items.answer_nums}}/{{items.nums}}
+              </view>
+            </view>
+          </view>
+        </view>
+
+      </view>
+    </view>
+  </scroll-view>
+
+  <!-- 载入动画 -->
+  <view wx:if="{{!isLoaded}}">
+    <image class="loading-img" src="/imgs/timg.gif" mode="aspectFit" style="margin-top:-100rpx;"></image>
+  </view>
+</view>
+
+<waterWave id="waterWave"></waterWave>
