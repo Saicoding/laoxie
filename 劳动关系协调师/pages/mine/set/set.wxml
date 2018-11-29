@@ -1,0 +1,6 @@
+<!--pages/mine/set/set.wxml-->
+<view class="mycontainer">
+  <view class="block" style="text-align:center;padding-left:0rpx;margin-top:18rpx;" bindtap='goOut' hover-stay-time='100' hover-class='select'>
+    退出登录
+  </view>
+</view>

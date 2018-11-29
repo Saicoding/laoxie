@@ -1,0 +1,46 @@
+{
+  "pages": [
+    "pages/index/index",
+    "pages/tiku/tiku",
+    "pages/mine/mineIndex/mineIndex",
+    "pages/login1/login1",
+    "pages/live/live",
+    "pages/video/video"
+  ],
+  "window": {
+    "backgroundTextStyle": "light",
+    "navigationBarBackgroundColor": "#ff6201",
+    "navigationBarTitleText": "劳动关系协调师",
+    "navigationBarTextStyle": "white"
+  },
+  "tabBar": {
+    "selectedColor": "#ff6201",
+    "color": "#333",
+    "list": [
+      {
+        "pagePath": "pages/index/index",
+        "selectedColor": "#ff6201",
+        "iconPath": "/imgs/live.png",
+        "selectedIconPath": "/imgs/live-s.png",
+        "color": "#333",
+        "text": "直播"
+      },
+      {
+        "pagePath": "pages/tiku/tiku",
+        "selectedColor": "#ff6201",
+        "iconPath": "/imgs/tiku.png",
+        "selectedIconPath": "/imgs/tiku-s.png",
+        "color": "#333",
+        "text": "题库"
+      },
+      {
+        "pagePath": "pages/mine/mineIndex/mineIndex",
+        "iconPath": "/imgs/mine.png",
+        "selectedIconPath": "/imgs/mine-s.png",
+        "selectedColor": "#ff6201",
+        "color": "#333",
+        "text": "我的"
+      }
+    ]
+  }
+}

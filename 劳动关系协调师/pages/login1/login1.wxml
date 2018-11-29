@@ -1,0 +1,16 @@
+<view class = "mycontainer">
+  <view style = "letter-spacing: 3rpx;font-weight:bold;">
+    手机号登录
+  </view>
+  <view class ="phoneNum">
+    <input class ="phoneNUm-input" placeholder='请输入手机号码' auto-focus bindinput="phoneInput"/>
+  </view>
+  <view class ="pwd">
+    <input type = "password" class = "pwd-input" placeholder = '请输入密码' bindinput="pwdInput"/>
+  </view>
+  <view class ="prompt">
+    提示:帐户开通请联系   <span style ="color:#FF6201">4006-456-114</span>
+  </view>
+
+  <button class ="confirm-btn" bindtap = "confirm" hover-class='select' hover-start-time='0' hover-stay-time='300'>确定</button>
+</view>

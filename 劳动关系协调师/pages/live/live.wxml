@@ -1,0 +1,12 @@
+<live-player  class="live"  id="player" src="rtmp://play01.chinaplat.com/live/{{sign}}" mode="RTC" autoplay bindstatechange="statechange" binderror="error" orientation="horizontal">
+  <!-- 控制条 -->
+  <cover-view  bindtap='toogleShow' class="fullScreen-control" style="height:750rpx;width:{{windowHeight}}rpx;top:{{(windowHeight-750)/2}}rpx;left:{{(750-windowHeight)/2}}rpx; transform:rotate(90deg);">
+    {{prompt}}{{test}}
+  </cover-view>
+
+  <cover-image bindtap ="out" wx:if="{{show}}" class="back" src="/imgs/back.png" mode="aspectFit" style="margin-top:{{windowHeight+120}}rpx;"></cover-image>
+
+  <cover-image bindtap ="change" wx:if="{{show}}" class="back" src="/imgs/back.png" mode="aspectFit" style="margin-top:{{windowHeight+120}}rpx;"></cover-image>
+
+  <cover-view class ="model"></cover-view>
+</live-player>

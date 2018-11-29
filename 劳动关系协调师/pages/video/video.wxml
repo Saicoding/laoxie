@@ -1,0 +1,3 @@
+<video  id="myVideo" controls  class="video" src="{{videourl}}"  custom-cache="false" 
+   bindfullscreenchange="bindfullscreenchange" enable-progress-gesture show-center-play-btn="{{false}}" autoplay show-fullscreen-btn = "{{true}}">
+</video>
