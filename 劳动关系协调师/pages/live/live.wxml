@@ -1,12 +1,21 @@
-<live-player  class="live"  id="player" src="rtmp://play01.chinaplat.com/live/{{sign}}" mode="RTC" autoplay bindstatechange="statechange" binderror="error" orientation="horizontal">
+<live-player class="live" id="player" src="rtmp://play01.chinaplat.com/live/{{sign}}" mode="RTC" autoplay bindstatechange="statechange" bindfullscreenchange="bindfullscreenchange" binderror="error" orientation="{{direction}}">
   <!-- 控制条 -->
-  <cover-view  bindtap='toogleShow' class="fullScreen-control" style="height:750rpx;width:{{windowHeight}}rpx;top:{{(windowHeight-750)/2}}rpx;left:{{(750-windowHeight)/2}}rpx; transform:rotate(90deg);">
-    {{prompt}}{{test}}
+  <cover-view bindtap='toogleShow' class="fullScreen-control" style="height:750rpx;width:{{windowHeight}}rpx;top:{{(windowHeight-750)/2}}rpx;left:{{(750-windowHeight)/2}}rpx; transform:rotate(90deg);">
+    {{prompt}}
+  </cover-view>
+  <!--  蒙版 -->
+  <cover-view wx:if="{{show}}" class="model-opacity"></cover-view>
+
+  <cover-view wx:if="{{show}}" class="model" bindtap='test' >
+      <!--  画面方向 -->
+    <cover-view bindtap="changeDirection" class="direction" >
+      <cover-image class="direction-img" src="{{direction=='vertical'?'/imgs/direction1.png':'/imgs/direction2.png'}}" mode="aspectFit"></cover-image>
+    </cover-view>
+    <!-- 退出按钮 -->
+    <cover-view bindtap="out"  class="back">
+      <cover-image class="back-img" src="/imgs/back.png" mode="aspectFit"></cover-image>
+    </cover-view>
+
   </cover-view>
 
-  <cover-image bindtap ="out" wx:if="{{show}}" class="back" src="/imgs/back.png" mode="aspectFit" style="margin-top:{{windowHeight+120}}rpx;"></cover-image>
-
-  <cover-image bindtap ="change" wx:if="{{show}}" class="back" src="/imgs/back.png" mode="aspectFit" style="margin-top:{{windowHeight+120}}rpx;"></cover-image>
-
-  <cover-view class ="model"></cover-view>
 </live-player>

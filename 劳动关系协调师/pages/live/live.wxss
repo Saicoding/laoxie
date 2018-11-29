@@ -49,22 +49,38 @@ live-player {
   position: absolute;
   text-align: center;
   line-height:750rpx;
-  z-index: 800;
 }
 
-.model{
+.model,.model-opacity{
+  position: absolute;
+  width:70rpx;
+  height:200rpx;
   font-size: 28rpx;
+  bottom:40rpx;
   color:white;
   margin-top:120rpx;
-  position: absolute;
-  line-height:750rpx;
-  z-index: 801;
-  background: radial-gradient(rgba(0, 0, 0, 1) 60%, rgba(0, 0, 0, 0.3) 40%); /* 标准的语法 */
+  border-radius: 70rpx;
+  left:650rpx;
 }
 
-.back{
+.model-opacity{
+  background: black;
+  opacity: 0.3;
+}
+
+
+.back,.direction{
+  height:70rpx;
+  width:70rpx;
+  margin-top:20rpx;
+  transform:rotate(90deg);
+  opacity: 0.9;
+}
+
+
+.back-img,.direction-img{
   width:40rpx;
   height:40rpx;
-  transform:rotate(90deg);
-  margin-left:680rpx;
+  margin-top:15rpx;
+  margin-left:15rpx;
 }

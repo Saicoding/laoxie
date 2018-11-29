@@ -7,7 +7,8 @@ Page({
   data: {
     prompt: "",
     fullScreen: false,
-    show:true
+    show:true,
+    direction:"vertical"
   },
 
   /**
@@ -54,6 +55,23 @@ Page({
       success: (res) => {
         console.log(res)
       }
+    })
+  },
+
+  /**
+   * 改变横竖屏
+   */
+  changeDirection:function(){
+    let self = this;
+    let direction = self.data.direction;
+    
+    if (direction == "vertical"){
+      direction = "horizontal";
+    }else{
+      direction = "vertical";
+    }
+    self.setData({
+      direction: direction
     })
   },
 
@@ -130,6 +148,10 @@ Page({
     console.error('live-player error:', e.detail.errMsg)
   },
 
+  test:function(e){
+    console.log('model')
+  },
+
   /** 
    * 点击视频显示控制面板
    */
@@ -154,6 +176,16 @@ Page({
     self.setData({
       show:!self.data.show
     })
+  },
+
+  /**
+   * 如果不是全屏，直接退出
+   */
+  bindfullscreenchange:function(e){
+    let fullScreen = e.detail.fullScreen;
+    if (!fullScreen){
+      wx.navigateBack({})
+    }
   },
 
   /**

@@ -16,7 +16,7 @@
     <view class ="past-text">往期回顾</view>
   </view>
 
-  <scroll-view scroll-y style="height:{{windowHeight-552}}rpx"  class ="list">
+  <scroll-view scroll-y style="height:{{windowHeight-524}}rpx"  class ="list">
     <view wx:if = "{{pastVideos.length>0}}">
       <view wx:for = "{{pastVideos}}" wx:for-item = "video" wx:key ="v">
         <view data-title = "{{video.title}}" data-videoUrl ="{{video.video}}" bindtap ="watchPast" class ="video">
@@ -32,3 +32,4 @@
     </view>
   </scroll-view>
 </view>
+
