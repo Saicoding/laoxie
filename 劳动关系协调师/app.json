@@ -5,7 +5,8 @@
     "pages/mine/mineIndex/mineIndex",
     "pages/login1/login1",
     "pages/live/live",
-    "pages/video/video"
+    "pages/video/video",
+    "pages/noPage/noPage"
   ],
   "window": {
     "backgroundTextStyle": "light",
@@ -26,7 +27,7 @@
         "text": "直播"
       },
       {
-        "pagePath": "pages/tiku/tiku",
+        "pagePath": "pages/noPage/noPage",
         "selectedColor": "#ff6201",
         "iconPath": "/imgs/tiku.png",
         "selectedIconPath": "/imgs/tiku-s.png",

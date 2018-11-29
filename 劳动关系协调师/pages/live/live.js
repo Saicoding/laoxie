@@ -44,6 +44,12 @@ Page({
         })
       }
     });
+
+    wx.startDeviceMotionListening({
+      success:function(res){
+        console.log(res)
+      }
+    })
   },
 
   /**
