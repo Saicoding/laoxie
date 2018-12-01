@@ -1,4 +1,7 @@
 // pages/live/live.js
+let API_URL = "https://xcx2.chinaplat.com/laoxie/";
+let app = getApp();
+
 Page({
 
   /**
@@ -20,6 +23,7 @@ Page({
       sign: sign
     })
     let livePlayer = wx.createLivePlayerContext("player", this);
+
     livePlayer.requestFullScreen({
       success: (res) => {
         console.log(res)
@@ -57,10 +61,21 @@ Page({
    */
   onShow: function() {
     let livePlayer = wx.createLivePlayerContext("player", this);
+
     livePlayer.requestFullScreen({
       success: (res) => {
         console.log(res)
       }
+    })
+
+    let user = wx.getStorageSync('user');
+
+    let LoginRandom = user.Login_random;
+    let zcode = user.zcode;
+    let sign = this.data.sign;
+
+    app.post(API_URL, "action=changeRoomRecords&Loginrandom=" + LoginRandom + "&zcode=" + zcode + "&flag=1" + "&roomid=" + sign, false, true, "").then((res) => {
+      console.log(res)
     })
   },
 
@@ -86,7 +101,7 @@ Page({
    */
   statechange: function(e) {
     let self = this;
-    console.log('live-player code:', e.detail.code)
+
     let code = e.detail.code;
     let prompt = "";
 
@@ -107,7 +122,7 @@ Page({
       case 2103:
       case 2104:
       case 2105:
-        prompt = "当前网络不稳定...";
+        prompt = "";
         break;
       case 2105:
         // prompt = "当前视频播放出现卡顿...";
@@ -151,11 +166,7 @@ Page({
    * 发生错误时
    */
   error: function(e) {
-    console.error('live-player error:', e.detail.errMsg)
-  },
-
-  test:function(e){
-    console.log('model')
+    console.error('live-player error:', e.detail.errMsg);
   },
 
   /** 
@@ -190,7 +201,7 @@ Page({
   bindfullscreenchange:function(e){
     let fullScreen = e.detail.fullScreen;
     if (!fullScreen){
-      wx.navigateBack({})
+      wx.navigateBack({});
     }
   },
 
@@ -199,6 +210,33 @@ Page({
    */
 
   out:function(){
-    wx.navigateBack({})
+    wx.navigateBack({});
   },
+
+  /**
+   * 生命周期事件
+   */
+
+  onUnload:function(){
+    let user = wx.getStorageSync('user');
+
+    let LoginRandom = user.Login_random;
+    let zcode = user.zcode;
+    let sign = this.data.sign
+
+    app.post(API_URL, "action=changeRoomRecords&Loginrandom=" + LoginRandom + "&zcode=" + zcode + "&flag=0" + "&roomid=" + sign, false, true, "").then((res) => {
+
+    })
+  },
+
+  onHide:function(){
+    let user = wx.getStorageSync('user');
+    let LoginRandom = user.Login_random;
+    let zcode = user.zcode;
+    let sign = this.data.sign;
+
+    app.post(API_URL, "action=changeRoomRecords&Loginrandom=" + LoginRandom + "&zcode=" + zcode + "&flag=0" + "&roomid=" + sign, false, true, "").then((res) => {
+
+    })
+  }
 })

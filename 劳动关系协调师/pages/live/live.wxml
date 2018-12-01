@@ -15,7 +15,5 @@
     <cover-view bindtap="out"  class="back">
       <cover-image class="back-img" src="/imgs/back.png" mode="aspectFit"></cover-image>
     </cover-view>
-
   </cover-view>
-
 </live-player>

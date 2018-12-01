@@ -18,7 +18,7 @@
   <scroll-view scroll-y style="height:{{windowHeight-534}}rpx"  class ="list">
     <view wx:if = "{{pastVideos.length>0}}">
       <view wx:for = "{{pastVideos}}" wx:for-item = "video" wx:key ="v" >
-        <view data-title = "{{video.title}}" data-videoUrl ="{{video.video}}" bindtap ="watchPast" class ="video" style="margin-top:{{index <=1?30:80}}rpx;">
+        <view data-title = "{{video.title}}" data-videoUrl ="{{video.video}}" bindtap ="watchPast" class ="video" style="margin-left:{{index%2==1?10:0}}rpx;margin-top:{{index <=1?30:80}}rpx;">
           <image class ="video-img-big" src ="{{video.img}}" mode = "aspectFit"></image>
           <view class ="time">{{video.timeStr}}</view>
           <view class ="time-model"></view>
