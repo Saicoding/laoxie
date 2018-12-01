@@ -60,6 +60,7 @@ Page({
    * 生命周期函数--监听页面显示
    */
   onShow: function() {
+    let self = this;
     let livePlayer = wx.createLivePlayerContext("player", this);
 
     livePlayer.requestFullScreen({
@@ -74,8 +75,11 @@ Page({
     let zcode = user.zcode;
     let sign = this.data.sign;
 
+    self.setData({
+      
+    })
     app.post(API_URL, "action=changeRoomRecords&Loginrandom=" + LoginRandom + "&zcode=" + zcode + "&flag=1" + "&roomid=" + sign, false, true, "").then((res) => {
-      console.log(res)
+
     })
   },
 
