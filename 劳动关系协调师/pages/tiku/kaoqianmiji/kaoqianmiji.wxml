@@ -1,0 +1,4 @@
+<!--pages/tiku/kaoqianmiji/kaoqianmiji.wxml-->
+<view wx:if = "{{!isHasShiti}}">
+  <hasNoPage str = "考前十天上线，耐心等待"></hasNoPage>
+</view>

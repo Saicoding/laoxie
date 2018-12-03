@@ -1,0 +1,19 @@
+<!--pages/tiku/modelReal/modelRealList/modelRealList.wxml-->
+<view wx:if="{{isHasShiti && isLoaded}}" wx:for="{{modelList}}" wx:for-item="model" wx:key="in" wx:for-index="index">
+  <view hover-class='select' hover-stay-time='300'>
+    <view class="item" bindtap="GOModelRealDetail" data-id="{{model.id}}" data-times="{{model.times}}" data-totalscore="{{model.totalscore}}" data-test_score="{{model.test_score}}" data-title="{{model.title}}">
+      <view class="score" style = "background: url({{model.base64}});  background-repeat:no-repeat; background-size:100% 100%;color:{{model.scoreColor}}">
+        {{model.test_score == 0?"":model.test_score}}
+      </view>
+      <view class="title">{{model.title}}</view>
+    </view>
+  </view>
+</view>
+
+<view wx:if="{{!isLoaded}}">
+  <image class="loading-img" src="/imgs/timg.gif" mode="aspectFit" style="margin-top:{{windowHeight/2-400}}rpx;"></image>
+</view>
+
+<view wx:if="{{!isHasShiti}}">
+  <hasNoPage str="{{message}}"></hasNoPage>
+</view>

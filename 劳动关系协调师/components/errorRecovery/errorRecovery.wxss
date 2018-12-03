@@ -1,0 +1,100 @@
+/* components/errorRecovery/errorRecovery.wxss */
+.container-out{
+  width:80%;
+  border:1px solid#f3f3f3;
+  margin: 0 auto;
+  z-index: 100;
+  background: white;
+}
+.container-in{
+  width:80%;
+  position: absolute;
+  top:100rpx;
+  background: white;
+  z-index: 100;
+  border-radius:30rpx;
+  padding-bottom: 35rpx;
+}
+
+.modal{
+  position: absolute;
+  top:0rpx;
+  left:0rpx;
+  width:100%;
+  height:100%;
+  filter:Alpha(Opacity=60);
+  background-color:#1F1F1F;
+  opacity: 0.5;
+  z-index: 99;
+}
+
+.title{
+  text-align: center;
+  height:100rpx;
+  line-height: 100rpx;
+  font-size:35rpx;
+  border-bottom:2rpx solid #c9c9c9;
+}
+
+.select{
+  background: #ffffff;
+  width:100%;
+  margin: 0 auto;
+  border-radius: 10rpx;
+}
+
+.select-img,.select-text{
+  display: float;
+  float:left;
+}
+
+.mylabel{
+  clear:both;
+  height:80rpx;
+  line-height: 80rpx;
+    padding-left:50rpx;
+}
+
+.select-img{
+  width:40rpx;
+  height:40rpx;
+  margin-top:20rpx;
+}
+.select-text{
+  margin-left:50rpx;
+}
+
+.radio-group {
+  width: 100%;
+  font-size: 30rpx;
+  margin-top: 50rpx;
+}
+
+.content{
+  border:1rpx solid #cacaca;
+  border-radius:5rpx;
+  width:90%;
+  height:200rpx;
+  margin:0 auto;
+  font-size:30rpx;
+  padding:10rpx 10rpx 10rpx 10rpx
+}
+
+.submit{
+  background: #0197f6;
+  font-size:32rpx;
+  width:75%;
+  height:70rpx;
+  line-height: 70rpx;
+  margin:0 auto;
+  color:white;
+  text-align: center;
+  border-radius: 10rpx;
+  margin-top:50rpx;
+  letter-spacing: 4rpx;
+}
+
+.placeholder{
+  font-size:25rpx;
+  letter-spacing: 3rpx;
+}

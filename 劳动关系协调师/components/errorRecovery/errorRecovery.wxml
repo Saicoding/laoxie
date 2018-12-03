@@ -1,0 +1,28 @@
+<!--components/Dialog/dialog.wxml-->
+<view hidden="{{!isShow}}" class="container-out" catchtap='stopBubbling'>
+  <view class="container-in">
+    <view class="title">纠错原因</view>
+
+    <view class="select" style ="margin-top:-30rpx;">
+      <radio-group class="radio-group" bindchange="errorSelect">
+        <label wx:for="{{options}}" wx:for-item="error" wx:key="key">
+          <radio hidden value="{{index}}" checked="{{checked}}" />
+          <view class="mylabel">
+            <image class="select-img" src="{{error.src}}" mode="aspectFit"></image>
+            <view class="select-text">{{error.title}}</view>
+          </view>
+        </label>
+      </radio-group>
+    </view>
+
+    <textarea bindinput = "saveContent" show-confirm-bar cursor-spacing = "{{80*(windowWidth/750)}}" placeholder = "请输入详细错误信息,我们会尽快处理." placeholder-class = "placeholder" class="content" style = "margin-top:50rpx;"></textarea>
+
+    <view class="submit" bindtap = "_submit">
+      提交
+    </view>
+
+  </view>
+</view>
+
+<view wx:if="{{isShow}}" class="modal" bindtap="tapBlank">
+</view>

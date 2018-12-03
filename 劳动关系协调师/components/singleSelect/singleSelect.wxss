@@ -1,0 +1,39 @@
+.container{
+  background: #ffffff;
+  width:94%;
+  margin: 0 auto;
+  border-radius: 10rpx;
+}
+.radio-group {
+  width: 100%;
+  font-size: 30rpx;
+  margin-top: 50rpx;
+}
+
+.imgAndText {
+  width: 100%;
+  font-size: 35rpx;
+  padding-left: 30rpx;
+  padding-top:25rpx;
+  padding-bottom:25rpx;
+  vertical-align: top;
+}
+
+.icon{
+  display: float;
+  float:left;
+  width:50rpx;
+  height:50rpx;
+}
+
+/* 答案选项的文字 */
+
+.answer-text {
+  display: inline-flex;
+  font-size: 30rpx;
+  margin-left:40rpx;
+  line-height:50rpx;
+  width: 543rpx;
+  margin-top:0rpx;
+  vertical-align: top;
+}

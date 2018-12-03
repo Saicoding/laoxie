@@ -40,7 +40,7 @@
   <view class="wave2">
   </view>
   <view class='shiti_zhangjie'>
-    章节目录
+    科目题型练习
   </view>
   <!-- <button bindtap='test'>测试</button> -->
 
@@ -54,7 +54,7 @@
 
 
         <view data-itemIdx="{{itemIdx}}" id='{{item.id}}' bindtap="onTapZhangjie" class="block" hover-start-time="100" hover-class="select">
-          <image wx:if="{{item.hasChild}}" class="zhang-icon" src="{{item.isFolder && !item.display?'/imgs/folder.png':'/imgs/unfolder.png'}}"></image>
+          <image  class="zhang-icon" src="{{item.isFolder && !item.display?'/imgs/folder.png':'/imgs/unfolder.png'}}"></image>
 
           <view class='title' id='{{item.id}}' style="color:{{item.isAnswerAll?'#9D9D9D':'black'}}">
             {{item.title}}
@@ -66,8 +66,8 @@
         </view>
 
         <view class="jie" animation="{{!item.isFolder?item.spreadData:item.folderData}}">
-          <view wx:for="{{item.zhangjie_child}}" wx:for-item="items" wx:for-index="jieIdx" wx:key="navItems">
-            <view data-itemIdx="{{itemIdx}}" data-jieIdx="{{jieIdx}}" id='{{items.id}}' bindtap="GOzuoti" class='jie_block' hover-start-time="100" hover-class="select">
+          <view wx:for="{{item.data}}" wx:for-item="items" wx:for-index="jieIdx" wx:key="navItems">
+            <view data-itemIdx="{{itemIdx}}" data-jieIdx="{{jieIdx}}" data-tid="{{items.tid}}" id='{{item.id}}' bindtap="GOzuoti" class='jie_block' hover-start-time="100" hover-class="select">
               <view class="jie_title" style="color:{{items.isAnswerAll?'#9D9D9D':'black'}}">{{items.title}}</view>
               <view class="answer_number">
                 {{items.answer_nums}}/{{items.nums}}

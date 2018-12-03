@@ -1,0 +1,43 @@
+<view class="mycontainer">
+  <checkbox-group class='checkbox-group' bindchange='_checkVal'>
+    <label>
+      <checkbox hidden value="A" checked="{{shiti.A_checked}}" />
+      <view class="answer-block">
+        <image src="{{shiti.srcs.A}}" mode="aspectFit" class="answer-img"></image>
+        <view class="answer-text">{{shiti.A}}</view>
+      </view>
+    </label>
+
+    <label>
+      <checkbox hidden value="B" checked="{{shiti.B_checked}}" />
+      <view class="answer-block">
+        <image src="{{shiti.srcs.B}}" mode="aspectFit" class="answer-img"></image>
+        <view class="answer-text">{{shiti.B}}</view>
+      </view>
+    </label>
+
+    <label>
+      <checkbox hidden value="C" checked="{{shiti.C_checked}}" />
+      <view class="answer-block">
+        <image src="{{shiti.srcs.C}}" mode="aspectFit" class="answer-img"></image>
+        <view class="answer-text">{{shiti.C}}</view>
+      </view>
+    </label>
+
+    <label>
+      <checkbox hidden value="D" checked="{{shiti.D_checked}}" />
+      <view class="answer-block">
+        <image src="{{shiti.srcs.D}}" mode="aspectFit" class="answer-img"></image>
+        <view class="answer-text">{{shiti.D}}</view>
+      </view>
+    </label>
+
+    <label wx:if="{{shiti.E==''?false:true}}">
+      <checkbox hidden value="E" checked="{{shiti.E_checked}}" />
+      <view class="answer-block">
+        <image src="{{shiti.srcs.E}}" mode="aspectFit" class="answer-img"></image>
+        <view class="answer-text">{{shiti.E}}</view>
+      </view>
+    </label>
+  </checkbox-group>
+</view>

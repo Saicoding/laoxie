@@ -1,0 +1,16 @@
+<view hidden='{{hidden}}' class = "container">
+  <view class="bottom-block1" bindtap="_submit">
+    {{text}}
+  </view>
+
+  <view class="bottom-block2">
+    {{timeStr}}
+  </view>
+
+  <view class="bottom-block3" bindtap="_toggleMarkAnswer" style="float:right">
+    <image src="/imgs/list.png" mod="aspectFit" class="bottom-img"></image>
+    <view class="bottom-text" style="width:80rpx; text-align:right;">{{px}}</view>
+    <view class="bottom-text">/</view>
+    <view class="bottom-text" style="width:80rpx;color:#a0a0a0;">{{nums}}</view>
+  </view>
+</view>

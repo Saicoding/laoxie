@@ -1,0 +1,69 @@
+<!--pages/tiku/zuoti/index.wxml-->
+<swiper wx:if="{{isLoaded}}" duration="200" current="{{myCurrent}}" circular="{{circular}}" skip-hidden-item-layout="true" class="swiper" bindchange="sliderChange">
+  <block wx:for="{{sliderShitiArray}}" wx:for-item="shiti" wx:key="ti">
+    <swiper-item>
+      <scroll-view scroll-y style="height:{{windowHeight-85}}rpx;" catchlongtap='_toogleMarkAnswer'>
+        <view style="border:1rpx solid white;padding-bottom:50rpx;">
+          <!--问题-->
+          <question bindtoogleAnimation="_toogleAnimation" isModelReal="true" id="q{{shiti.px}}" num_color="{{shiti.num_color}}" px="{{shiti.px}}" tx="{{shiti.tx}}" question="{{shiti.question}}"></question>
+
+          <!--单选题-->
+          <view style="margin-botoom:50rpx;" wx:if="{{shiti.TX == 1}}">
+            <singleSelect shiti="{{shiti}}" checked="{{checked}}" bindanswerSelect="_answerSelect"> </singleSelect>
+            <!-- 解析 -->
+            <jiexi isAnswer="{{isSubmit}}" jiexi="{{shiti.jiexi}}"></jiexi>
+          </view>
+
+          <!--多选题-->
+          <view style="margin-botoom:50rpx;" wx:if="{{shiti.TX ==2}}">
+
+            <multiSelect shiti="{{shiti}}" checked="{{checked}}" bindcheckVal="_answerSelect"></multiSelect>
+            <!-- 解析 -->
+            <jiexi isAnswer="{{isSubmit}}" jiexi="{{shiti.jiexi}}"></jiexi>
+          </view>
+
+          <!--材料题-->
+          <view style="margin-botoom:50rpx;" wx:if="{{shiti.TX == 99}}">
+            <view wx:if="{{!shiti.confirm&&!isSubmit}}" class="cailiaoZuoti">
+              <button class="cailiaoZuoti-btn" bindtap='CLZuoti'>答题</button>
+            </view>
+            <!-- 材料题小题的滑动框 -->
+            <view wx:if="{{shiti.confirm || isSubmit}}">
+              <swiper current="{{xiaotiCurrent}}" indicator-dots vertical="true" skip-hidden-item-layout="true" class="swiper-xiaoti" style="height:{{windowHeight-280}}rpx" bindchange="xiaotiSliderChange" indicator-active-color="#1d9bf7">
+                <block wx:for="{{shiti.xiaoti}}" wx:for-item="xiaoti" wx:key="ti">
+                  <swiper-item>
+                    <!--问题-->
+                    <question class="question" num_color="{{xiaoti.num_color}}" px="{{xiaoti.px}}" tx="{{xiaoti.tx}}" question="{{xiaoti.question}}"></question>
+
+                    <!--单选题-->
+                    <view wx:if="{{xiaoti.TX == 1}}">
+                      <singleSelect data-px="{{xiaoti.px}}" shiti="{{xiaoti}}" checked="{{checked}}" bindanswerSelect="_CLAnswerSelect"> </singleSelect>
+                    </view>
+                    <!--多选题-->
+                    <view wx:if="{{xiaoti.TX ==2}}">
+                      <multiSelect data-px="{{xiaoti.px}}" shiti="{{xiaoti}}" checked="{{checked}}" bindcheckVal="_CLAnswerSelect"></multiSelect>
+                    </view>
+                  </swiper-item>
+                </block>
+              </swiper>
+            </view>
+          </view>
+        </view>
+      </scroll-view>
+    </swiper-item>
+  </block>
+</swiper>
+
+<!-- 载入动画 -->
+<view wx:if="{{!isLoaded}}">
+  <image class="loading-img" src="/imgs/timg.gif" mode="aspectFit" style="margin-top:{{windowHeight/2-400}}rpx;"></image>
+</view>
+
+<!-- 底部正确错误个数统计条 -->
+<modelCount hidden="{{!isLoaded}}" text="{{text}}" id="modelCount" nums="{{nums}}" px="{{shitiNum}}" class="bottom" bindrestart="_restart" bindsubmit="_submit" bindtoogleMarkAnswer="_toogleMarkAnswer">
+</modelCount>
+<!-- 答题板 -->
+<markAnswer id="markAnswer"  windowHeight="{{windowHeight}}" markAnswerItems="{{markAnswerItems}}" bind:tapEvent="_tapEvent">
+</markAnswer>
+<!-- 点击水波 -->
+<waterWave id="waterWave"></waterWave>

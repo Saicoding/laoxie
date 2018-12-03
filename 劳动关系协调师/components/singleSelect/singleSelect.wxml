@@ -1,0 +1,32 @@
+<view class="container">
+  <radio-group class="radio-group" bindchange="_answerSelect">
+    <label>
+      <radio hidden value="A" checked="{{checked}}" />
+      <view class="imgAndText">
+        <image class="icon" src="{{shiti.srcs.A}}" mode="aspectFit"></image>
+        <view class="answer-text">{{shiti.A}}</view>
+      </view>
+    </label>
+    <label>
+      <radio hidden value="B" checked="{{checked}}" />
+      <view class="imgAndText">
+        <image src="{{shiti.srcs.B}}" mode="aspectFit" class="icon"></image>
+        <view class="answer-text">{{shiti.B}}</view>
+      </view>
+    </label>
+    <label>
+      <radio hidden value="C" checked="{{checked}}" />
+      <view class="imgAndText">
+        <image src="{{shiti.srcs.C}}" mode="aspectFit" class="icon"></image>
+        <view class="answer-text">{{shiti.C}}</view>
+      </view>
+    </label>
+    <label>
+      <radio hidden value="D" checked="{{checked}}" />
+      <view class="imgAndText">
+        <image src="{{shiti.srcs.D}}" mode="aspectFit" class="icon"></image>
+        <view class="answer-text">{{shiti.D}}</view>
+      </view>
+    </label>
+  </radio-group>
+</view>

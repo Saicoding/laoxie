@@ -6,7 +6,7 @@
   <!--  蒙版 -->
   <cover-view wx:if="{{show}}" class="model-opacity"></cover-view>
 
-  <cover-view wx:if="{{show}}" class="model" >
+  <cover-view wx:if="{{show}}" class="model" bindtap='test' >
       <!--  画面方向 -->
     <cover-view bindtap="changeDirection" class="direction" >
       <cover-image class="direction-img" src="{{direction=='vertical'?'/imgs/direction1.png':'/imgs/direction2.png'}}" mode="aspectFit"></cover-image>
@@ -15,5 +15,6 @@
     <cover-view bindtap="out"  class="back">
       <cover-image class="back-img" src="/imgs/back.png" mode="aspectFit"></cover-image>
     </cover-view>
+
   </cover-view>
 </live-player>

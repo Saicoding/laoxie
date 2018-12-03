@@ -1,0 +1,31 @@
+.bottom-text {
+  display: float;
+  float:left;
+  font-size: 30rpx;
+  height: 40rpx;
+  line-height: 40rpx;
+  margin-left:10rpx;
+}
+
+.bottom-block {
+  display: float;
+  float:left;
+  height: 40rpx;
+  margin-left: 23rpx;
+  margin-top:19rpx;
+}
+
+.bottom-img {
+  display: float;
+  float:left;
+  width: 35rpx;
+  height: 35rpx;
+}
+
+.bottom-img-list{
+  display: float;
+  float:left;
+  width: 45rpx;
+  height: 45rpx;
+  margin-top:-3rpx;
+}

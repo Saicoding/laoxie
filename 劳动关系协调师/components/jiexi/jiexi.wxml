@@ -1,0 +1,12 @@
+      <view class ="container">
+      <view class="jiexi_border" hidden="{{!isAnswer || jiexi == ''}}">
+        <view class="line"></view>
+        <text class="txt">解析</text>
+        <view class="line"></view>
+      </view>
+
+      <!-- 解析描述 -->
+      <view class='jiexi' hidden="{{!isAnswer || jiexi == ''}}">
+        {{jiexi}}
+      </view>
+      </view>

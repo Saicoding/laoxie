@@ -1,0 +1,79 @@
+/* components/markAnswer/markAnswer.wxss */
+.container-out{
+  width:90%;
+  margin: 0 auto;
+  z-index: 100;
+  border-radius: 15rpx;
+}
+
+.container-in{
+  border:1rpx solid#f3f3f3;
+  width:90%;
+  position:absolute;
+  top:600rpx;
+  background: linear-gradient(to bottom right, white , #e9ddd5); /* 标准的语法 */
+  z-index: 100;
+  border-radius: 15rpx 15rpx 0rpx 0rpx;
+}
+
+.bottom{
+  width:90%;
+  height:80rpx;
+  position:absolute;
+  background: linear-gradient(to right, #f4eeea, #e9ddd5); /* 标准的语法 */
+  z-index: 100;
+  border:1rpx solid#f3f3f3;
+  border-radius: 0rpx 0rpx 15rpx 15rpx;
+}
+
+.restart{
+  width:150rpx;
+  height:50rpx;
+  background: #ff7516;
+  line-height: 50rpx;
+  color:white;
+  text-align: center;
+  font-size:25rpx;
+  border-radius: 15rpx;
+  margin:15rpx auto;
+	box-shadow: 0 1rpx 3rpx rgba(0,0,0,0.6);
+	border-bottom: 1rpx solid rgba(0,0,0,0.25);
+}
+
+.icon{
+  display: float;
+  float:left;
+  width:50rpx;
+  height:50rpx;
+  border:1rpx solid #9c9c9c;
+  margin-left:20rpx;
+  margin-top:20rpx;
+  font-size:25rpx;
+  border-radius: 50rpx;
+  text-align: center;
+  line-height: 50rpx;
+  margin-bottom:20rpx;
+  justify-content:center;
+  box-shadow: 0 1rpx 3rpx rgba(0, 0, 0, 0.6);
+  border-bottom: 1rpx solid rgba(0, 0, 0, 0.25);
+}
+
+.select{
+  background: rgb(207, 206, 206);
+}
+
+.modal{
+  position: absolute;
+  top:0rpx;
+  left:0rpx;
+  width:100%;
+  height:100%;
+  filter:Alpha(Opacity=60);
+  background-color:#1F1F1F;
+  opacity: 0.3;
+  z-index: 99;
+}
+
+.select2{
+  background: #8648eb;
+}

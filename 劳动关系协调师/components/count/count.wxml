@@ -1,0 +1,26 @@
+<view class="bottom-block" bindtap="_toggleErrorRecovery">
+    <image src="/imgs/error_recovery.png" mod="aspectFit" class="bottom-img"></image>
+     <view class="bottom-text" style="color:#666666;font-size:30rpx;">纠错</view>
+</view>
+
+<view class="bottom-block" bindtap = "_toogleMark">
+  <image src="{{isMark ==0?'/imgs/mark.png':'/imgs/marked.png'}}" mod="aspectFit" class="bottom-img"></image>
+  <view class="bottom-text" style="color:#666666;font-size:30rpx;">收藏</view>
+</view>
+
+<view class="bottom-block" style = "margin-left:50rpx;">
+  <image src="/imgs/right.png" mod="aspectFit" class="bottom-img"></image>
+  <view class="bottom-text" style="color:#5ebded;width:30rpx;height:30rpx;margin-left:20rpx;">{{rightNum}}</view>
+</view>
+
+<view class="bottom-block" >
+  <image src="/imgs/wrong.png" mod="aspectFit" class="bottom-img"></image>
+  <view class="bottom-text" style="color:#e85e60;width:30rpx;height:30rpx;margin-left:20rpx;">{{wrongNum}}</view>
+</view>
+
+<view class="bottom-block" bindtap="_toggleMarkAnswer" style = "float:right">
+  <image src="/imgs/list.png" mod="aspectFit" class="bottom-img-list" ></image>
+  <view class="bottom-text" style= "width:80rpx;text-align:right;line-height:40rpx;">{{px}}</view>
+  <view class="bottom-text" style ="line-height:32rpx;">/</view>
+  <view class="bottom-text" style="color:#a0a0a0;margin-left:10rpx;width:80rpx;line-height:40rpx;">{{nums}}</view>
+</view>

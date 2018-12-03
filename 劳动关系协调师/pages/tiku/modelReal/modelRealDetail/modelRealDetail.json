@@ -1,0 +1,11 @@
+{
+  "usingComponents": {
+    "modelCount": "/components/modelCount/modelCount",
+    "markAnswer": "/components/markAnswer/markAnswer",
+    "question": "/components/question/question",
+    "singleSelect": "/components/singleSelect/singleSelect",
+    "multiSelect": "/components/multiSelect/multiSelect",
+    "jiexi": "/components/jiexi/jiexi",
+    "waterWave": "/components/waterWave/waterWave"
+  }
+}
