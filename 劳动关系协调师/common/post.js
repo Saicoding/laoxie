@@ -5,6 +5,7 @@ let animate = require('animate.js')
  * 练习题
  */
 function zuotiOnload(options, px, circular, myFavorite, shitiArray, user, page, all_nums, pageall,self){
+  console.log(shitiArray)
   let username = user.username;
   let LoginRandom = user.Login_random;
   let zcode = user.zcode;
@@ -25,8 +26,10 @@ function zuotiOnload(options, px, circular, myFavorite, shitiArray, user, page, 
     nextShiti = shitiArray[px];
     common.initShiti(nextShiti); //初始化试题对象
   }else if(px == 1){//如果是第一题
-    nextShiti = shitiArray[px];
-    common.initShiti(nextShiti); //初始化试题对象
+    if (shitiArray.length != 1) {
+      nextShiti = shitiArray[px];
+      common.initShiti(nextShiti); //初始化试题对象
+    }
   }else{
     preShiti = shitiArray[px-2];
     common.initShiti(preShiti); //初始化试题对象
@@ -55,8 +58,6 @@ function zuotiOnload(options, px, circular, myFavorite, shitiArray, user, page, 
           shitiArray[doneAnswer.px - 1].isAnswer = true;//设置已答试题的答案
         }
       }
-
-      console.log(shitiArray)
       
       //先处理是否是已经回答的题,渲染3个
       if (preShiti != undefined) common.processDoneAnswer(preShiti.done_daan, preShiti, self);
@@ -65,7 +66,6 @@ function zuotiOnload(options, px, circular, myFavorite, shitiArray, user, page, 
 
       //根据已答试题库得到正确题数和错误题数
       let rightAndWrongObj = common.setRightWrongNums(doneAnswerArray);
-
 
       //如果已答试题数目大于0才更新shiti
       if (doneAnswerArray.length > 0) {
@@ -87,10 +87,14 @@ function zuotiOnload(options, px, circular, myFavorite, shitiArray, user, page, 
     sliderShitiArray[1] = nextShiti;
     sliderShitiArray[2] = preShiti;
   } else if (px == 1) {//如果是第一题
-    sliderShitiArray[0] = midShiti;
-    sliderShitiArray[1] = nextShiti;
-  } else {//如果是最后一题
+    if (shitiArray.length !=1){
+      sliderShitiArray[0] = midShiti;
+      sliderShitiArray[1] = nextShiti;
+    }else{
+      sliderShitiArray[0] = midShiti;
+    }
 
+  } else {//如果是最后一题
     sliderShitiArray[0] = preShiti;
     sliderShitiArray[1] = midShiti;
     lastSliderIndex = 1;
@@ -146,7 +150,6 @@ function zuotiOnload(options, px, circular, myFavorite, shitiArray, user, page, 
 /**
  * 收藏题
  */
-
 function markOnload(options, px, circular, myFavorite,res, user, self){
   let shitiArray = res.data.shiti;
   let username = user.username;

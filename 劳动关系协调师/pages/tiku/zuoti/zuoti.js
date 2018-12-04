@@ -67,6 +67,7 @@ Page({
     }
 
     console.log("action=SelectShiti&LoginRandom=" + LoginRandom + "&z_id=" + options.z_id + "&tid=" + options.tid + "&zcode=" + zcode + "&page=" + page)
+
     app.post(API_URL, "action=SelectShiti&LoginRandom=" + LoginRandom + "&z_id=" + options.z_id + "&tid=" + options.tid + "&zcode=" + zcode + "&page=" + page, false, false, "", "", false, self).then((res) => {
       let shitiArray = res.data.shiti;
       let all_nums = res.data.all_nums;
@@ -201,6 +202,15 @@ Page({
     let doneAnswerArray = self.data.doneAnswerArray;
     let circular = self.data.circular;
 
+    isFold = false;
+
+    let lastStr = "#q" + px;
+    let question = self.selectComponent(lastStr);
+
+    question.setData({
+      style1: "display:block;margin-bottom:30rpx;height:90rpx"
+    })
+
     //判断滑动方向
     if ((lastSliderIndex == 0 && current == 1) || (lastSliderIndex == 1 && current == 2) || (lastSliderIndex == 2 && current == 0)) { //左滑
       direction = "左滑";
@@ -221,7 +231,7 @@ Page({
             isLoading: true //设置正在载入中
           })
 
-          app.post(API_URL, "action=SelectShiti&LoginRandom=" + LoginRandom + "&z_id=" + z_id + "&zcode=" + zcode + "&tid=" + tid + "&page=" + nextPage, false, false, "", true, self).then((res) => {
+          app.post(API_URL, "action=SelectShiti&LoginRandom=" + LoginRandom + "&z_id=" + z_id + "&zcode=" + zcode + "&tid=" + tid + "&page=" + nextPage, true, false, "载入中", true, self).then((res) => {
 
             let newWrongShitiArray = res.data.shiti;
 
@@ -250,7 +260,7 @@ Page({
             pageArray: pageArray,
           })
 
-          app.post(API_URL, "action=SelectShiti&LoginRandom=" + LoginRandom + "&z_id=" + z_id + "&tid=" + tid + "&zcode=" + zcode + "&page=" + prePage, false, false, "", true, self).then((res) => {
+          app.post(API_URL, "action=SelectShiti&LoginRandom=" + LoginRandom + "&z_id=" + z_id + "&tid=" + tid + "&zcode=" + zcode + "&page=" + prePage, true, false, "载入中", true, self).then((res) => {
 
             let newWrongShitiArray = res.data.shiti;
 
@@ -294,7 +304,6 @@ Page({
 
     common.storeLastShiti(px, self); //存储最后一题的状态
 
-    console.log(midShiti)
     //滑动结束后,更新滑动试题数组
     let sliderShitiArray = [];
 
@@ -343,6 +352,28 @@ Page({
       checked: false
     })
 
+    //如果是材料题就判断是否动画
+    if (midShiti.TX == 99) {
+      let str = "#q" + px;
+
+      let questionStr = midShiti.question;//问题的str
+      let height = common.getQuestionHeight(questionStr);//根据问题长度，计算应该多高显示
+
+      height = height >= 400 ? 400 : height;
+
+      let question = self.selectComponent(str);
+
+      animate.blockSpreadAnimation(90, height, question);
+
+      question.setData({//每切换到材料题就把占位框复位
+        style2: "positon: fixed; left: 20rpx;height:" + height + "rpx", //问题框"   
+      })
+
+      self.setData({
+        height: height
+      })
+    }
+
   },
 
   /**
@@ -364,16 +395,52 @@ Page({
     this.setData({
       shitiArray: shitiArray,
       sliderShitiArray: sliderShitiArray
-
     })
-
-
 
     common.storeWendaStatus(shiti, self);
 
     common.setWendaMarkAnswer(shiti, self) //更新答题板状态
 
     common.ifDoneAll(shitiArray, self.data.doneAnswerArray); //判断是不是所有题已经做完
+  },
+
+  /**
+  * 材料题作答
+  */
+  CLwendaSelect: function (e) {
+    let self = this;
+    let px = e.currentTarget.dataset.px;
+
+    let shitiPX = self.data.px;//试题的px
+    let shitiArray = self.data.shitiArray
+    let shiti = shitiArray[shitiPX - 1]; //本试题对象
+
+    let xiaoti = shiti.xiaoti;
+
+    let sliderShitiArray = self.data.sliderShitiArray;
+    let current = self.data.lastSliderIndex//当前滑动编号
+    let currentShiti = sliderShitiArray[current];
+
+    xiaoti[px-1].isAnswer = true;
+
+    let allDone = true;
+
+    for (let i = 0; i < xiaoti.length; i++) {
+      if (xiaoti[i].isAnswer == undefined || xiaoti[i].isAnswer == false){
+        allDone = false;
+      }
+    }
+
+    if(allDone){
+      common.storeWendaStatus(shiti, self);
+      common.setWendaMarkAnswer(shiti, self) //更新答题板状态
+      common.ifDoneAll(shitiArray, self.data.doneAnswerArray); //判断是不是所有题已经做完
+    }
+
+    this.setData({
+      sliderShitiArray: sliderShitiArray,
+      shitiArray: shitiArray
+    })
   },
 
   /**

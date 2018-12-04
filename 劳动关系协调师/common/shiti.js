@@ -73,6 +73,9 @@ function initShiti(shiti) {
         ti.C_checked = false;
         ti.D_checked = false;
         ti.E_checked = false;
+      } else if(ti.TX == 5){
+        ti.num_color = "#ffc122";
+        ti.tx = "问答题"
       }
     }
   } else if (TX == 5) { //问答题
@@ -612,7 +615,7 @@ function storeAnswerStatus(shiti, self) {
   })
 }
 
-/**
+/**,
  * 更新存储已答试题（单选和多选）(真题，押题)
  */
 function storeModelRealAnswerStatus(shiti, self) {
@@ -665,8 +668,6 @@ function storeModelRealAnswerStatus(shiti, self) {
     data: answer_nums_array,
   })
 }
-
-
 
 /**
  * 只更新本页面的已答对象
@@ -831,7 +832,7 @@ function setRightWrongNums(doneAnswerArray) {
     let doneAnswer = doneAnswerArray[i];
     if (doneAnswer.isRight == 0) {
       right++;
-    } else {
+    } else if (doneAnswer.isRight == 1){
       wrong++;
     }
   }
@@ -925,6 +926,7 @@ function storeModelRealLastShiti(px, self) {
  * 判断所有本节题已经做完
  */
 function ifDoneAll(shitiArray, doneAnswerArray) {
+  console.log(doneAnswerArray)
   if (shitiArray.length == doneAnswerArray.length) { //所有题都答完了
     wx.showToast({
       title: '所有题已经作答',

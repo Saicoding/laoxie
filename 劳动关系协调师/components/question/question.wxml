@@ -4,7 +4,7 @@
       <view wx:if="{{(tx =='材料题'&&isModelReal)?false:true}}" class="qustion-num-text" style="background:{{num_color}}">{{px}}</view>
       <view class="qustion-select" style="color:{{num_color}}">【{{tx}}】</view>
     </view>
-    <text>{{question}}</text>
+    <rich-text nodes ="{{question}}"></rich-text>
   </scroll-view>
 </view>
 <view wx:if="{{tx=='材料题'}}" class="blank" style="{{style1}}">

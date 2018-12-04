@@ -1,6 +1,6 @@
 // pages/tiku/modelReal/modelRealDetail/modelRealDetail.js
 // pages/tiku/zuoti/index.js
-const API_URL = 'https://xcx2.chinaplat.com/'; //接口地址
+const API_URL = 'https://xcx2.chinaplat.com/laoxie/'; //接口地址
 let common = require('../../../../common/shiti.js');
 let time1 = require('../../../../common/time.js');
 let animate = require('../../../../common/animate.js')
@@ -43,7 +43,8 @@ Page({
 
     let user = wx.getStorageSync('user');
     let username = user.username;
-    let acode = user.acode;
+    let Loginrandom = user.Login_random;
+    let zcode = user.zcode;
 
     let tiType = options.tiType;
     let test_score = options.test_score;
@@ -67,7 +68,9 @@ Page({
 
     let shitiNum = px;
 
-    app.post(API_URL, "action=SelectTestShow&sjid=" + id + "&username=" + username + "&acode=" + acode, false, true, "","",true,self).then((res) => {
+    console.log("action=SelectTestShow&sjid=" + id + "&Loginrandom=" + Loginrandom + "&zcode=" + zcode)
+
+    app.post(API_URL, "action=SelectTestShow&sjid=" + id + "&Loginrandom=" + Loginrandom + "&zcode=" + zcode, false, true, "","",true,self).then((res) => {
       let shitiArray = res.data.list;
 
       common.setModelRealCLShitiPx(shitiArray)
@@ -229,7 +232,6 @@ Page({
 
         newShitiArray: newShitiArray, //新的试题数组
         username: username, //用户账号名称
-        acode: acode //用户唯一码
       });
       
       //如果是材料题就有动画

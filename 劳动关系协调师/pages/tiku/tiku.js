@@ -35,6 +35,8 @@ Page({
 
     this.setWindowWidthHeightScrollHeight(); //获取窗口高度 宽度 并计算章节滚动条的高度
 
+    console.log("action=SelectZj&Loginrandom=" + Loginrandom + "&zcode=" + zcode)
+
     app.post(API_URL, "action=SelectZj&Loginrandom=" + Loginrandom + "&zcode=" + zcode, true, true, "请稍后").then((res) => { //得到上一步设置的题库下的所有章节
       console.log(res)
       this.setZhangjie(res.data.list); //得到当前题库的缓存,并设置变量:1.所有题库数组 2.要显示的题库id 3.要显示的题库index
@@ -146,80 +148,7 @@ Page({
   },
   /* 更改题库 */
   bindPickerChange: function(e) {
-    var self = this
-    self.foldAll();
-    self.setData({
-      index: e.detail.value, //设置是第几个题库
-      zhangjie_id: self.data.array[e.detail.value].id, //设置章节的id编号
-      folder_object: [], //初始化展开字节的对象,因为更换章节后默认都是不展开状态
-      scroll: 0, //初始化章节的滑动条
-      isLoaded: false,
-    })
-
-    app.post(API_URL, "action=SelectZj_l&z_id=" + self.data.zhangjie_id, false, false, "").then((res) => {
-      let answer_nums_array = [] //答题数目array
-
-      let zhangjie = res.data.list; //该题库的所有章节
-      for (let i = 0; i < zhangjie.length; i++) {
-        zhangjie[i].height = 0; //设置点击展开初始高度
-        zhangjie[i].isFolder = true; //设置展开初始值为已经折叠状态
-        zhangjie[i].display = false; //设置是否开始动画
-        zhangjie[i].zhang_answer_num = 0; //初始化答题数为0
-        answer_nums_array[i] = []; //初始化本地存储
-
-        let data = zhangjie[i].data;
-
-        for (let j = 0; j < child.length; j++) {
-          answer_nums_array[i][j] = []; //初始化本地存储
-          zhangjie[i].data[j].answer_nums = 0;
-        }
-
-      }
-      self.setData({
-        zhangjie: zhangjie,
-        isLoaded: true,
-      })
-
-      // 得到存储答题状态
-      wx.getStorage({
-        key: 'user',
-        success: function(res) {
-          let user = res.data;
-          wx.getStorage({
-            key: "shiti" + self.data.zhangjie_id + user.username,
-            success: function(res) {
-              //将每个节的已经作答的本地存储映射到组件中          
-              for (let i = 0; i < zhangjie.length; i++) {
-                let zhang_answer_num = 0; //章的总作答数
-
-                for (let j = 0; j < zhangjie[i].data.length; j++) {
-                  zhangjie[i].data[j].answer_nums = res.data[i][j].length;
-                  zhang_answer_num += res.data[i][j].length;
-                }
-
-                zhangjie[i].zhang_answer_num = zhang_answer_num;
-              }
-              //因为是在同步内部，最后需要更新章节信息，不更新数据不会改变
-              self.setData({
-                zhangjie: zhangjie
-              })
-            },
-            fail: function() { //如果没有本地存储就初始化
-              wx.setStorage({
-                key: "shiti" + self.data.zhangjie_id + user.username,
-                data: answer_nums_array
-              })
-            }
-          })
-
-          wx.setStorageSync("tiku_id" + user.username, {
-            "id": self.data.array[e.detail.value].id,
-            "index": self.data.index
-          });
-        },
-      })
-    })
-
+    return;
   },
   /**
    * 当点击章节

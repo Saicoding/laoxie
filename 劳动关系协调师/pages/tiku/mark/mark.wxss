@@ -43,6 +43,12 @@
 
 
 /******************** 提交答案 **********************/
+.answer{
+  font-size:30rpx;
+  margin-top:40rpx;
+  text-indent: 64rpx;
+  padding:0 20rpx;
+}
 
 .submit_answer {
   width: 50%;

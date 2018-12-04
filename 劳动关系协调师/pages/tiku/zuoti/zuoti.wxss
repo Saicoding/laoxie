@@ -58,7 +58,7 @@
 }
 
 .answer{
-  font-size:32rpx;
+  font-size:30rpx;
   margin-top:40rpx;
   text-indent: 64rpx;
   padding:0 20rpx;

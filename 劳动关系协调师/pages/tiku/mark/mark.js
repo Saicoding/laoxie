@@ -53,7 +53,7 @@ Page({
 
     console.log("action=GetFavoriteShiti&kid=" + kid + "&Loginrandom=" + Loginrandom + "&zcode=" + zcode)
     app.post(API_URL, "action=GetFavoriteShiti&kid=" + kid + "&Loginrandom=" + Loginrandom + "&zcode=" + zcode, false, true, "", "", true, self).then((res) => {
-      post.markOnload(options, px, circular, myFavorite, res, user,self)
+      post.markOnload(options, px, circular, myFavorite, res, user, self)
       isFold = false;
     }).catch((errMsg) => {
       console.log(errMsg); //错误提示信息
@@ -215,7 +215,7 @@ Page({
       sliderShitiArray: sliderShitiArray,
       circular: circular,
       myFavorite: myFavorite,
-      xiaotiCurrent: 0,//没滑动一道题都将材料题小题的滑动框index置为0
+      xiaotiCurrent: 0, //没滑动一道题都将材料题小题的滑动框index置为0
       lastSliderIndex: current,
       px: px,
       checked: false
@@ -226,8 +226,8 @@ Page({
     if (midShiti.TX == 99) {
       let str = "#q" + px;
 
-      let questionStr = midShiti.question;//问题的str
-      let height = common.getQuestionHeight(questionStr);//根据问题长度，计算应该多高显示
+      let questionStr = midShiti.question; //问题的str
+      let height = common.getQuestionHeight(questionStr); //根据问题长度，计算应该多高显示
 
       height = height >= 400 ? 400 : height;
 
@@ -235,7 +235,7 @@ Page({
 
       animate.blockSpreadAnimation(90, height, question);
 
-      question.setData({//每切换到材料题就把占位框复位
+      question.setData({ //每切换到材料题就把占位框复位
         style2: "positon: fixed; left: 20rpx;height:" + height + "rpx", //问题框"   
       })
 
@@ -243,6 +243,34 @@ Page({
         height: height
       })
     }
+  },
+
+  /**
+   * 问答题作答
+   */
+  wendaSelect: function(e) {
+    let self = this;
+    let px = self.data.px;
+    let shitiArray = self.data.shitiArray;
+    let sliderShitiArray = self.data.sliderShitiArray;
+    let current = self.data.lastSliderIndex //当前滑动编号
+    let currentShiti = sliderShitiArray[current];
+    let user = self.data.user;
+    let shiti = shitiArray[px - 1]; //本试题对象
+
+    currentShiti.isAnswer = true;
+    shiti.isAnswer = true;
+
+    this.setData({
+      shitiArray: shitiArray,
+      sliderShitiArray: sliderShitiArray
+    })
+
+    common.storeAnswerArray(shiti, self) //存储已答题数组
+
+    common.setWendaMarkAnswer(shiti, self) //更新答题板状态
+
+    common.ifDoneAll(shitiArray, self.data.doneAnswerArray); //判断是不是所有题已经做完
   },
 
   /**
@@ -355,96 +383,38 @@ Page({
   },
 
   /**
-   * 材料题多选点击一个选项
-   */
-  _CLCheckVal: function(e) {
-    let self = this;
-    let px = e.currentTarget.dataset.px;
-    let done_daan = e.detail.done_daan.sort();
-    let shitiArray = self.data.shitiArray;
-    let shitiPX = self.data.px;
-    let shiti = shitiArray[shitiPX - 1]; //本试题对象
-
-    let sliderShitiArray = self.data.sliderShitiArray;
-    let current = self.data.lastSliderIndex //当前滑动编号
-    let currentShiti = sliderShitiArray[current];
-    let currentXiaoti = currentShiti.xiaoti
-
-    let xiaoti = shiti.xiaoti; //材料题下面的小题
-    for (let i = 0; i < xiaoti.length; i++) {
-      if (px - 1 == i) { //找到对应小题
-        if (xiaoti[i].isAnswer) return;
-        //初始化多选的checked值
-        common.initMultiSelectChecked(currentXiaoti[i]);
-        //遍历这个答案，根据答案设置shiti的checked属性
-        done_daan = common.changeShitiChecked(done_daan, currentXiaoti[i]);
-
-        common.changeMultiShiti(done_daan, xiaoti[i]);
-        common.changeMultiShiti(done_daan, currentXiaoti[i]);
-      }
-    }
-    this.setData({
-      sliderShitiArray: sliderShitiArray,
-      shitiArray: shitiArray
-    })
-  },
-
-  /**
-   * 材料题作答
-   */
-  _CLAnswerSelect: function(e) {
+  * 材料题作答
+  */
+  CLwendaSelect: function (e) {
     let self = this;
     let px = e.currentTarget.dataset.px;
 
-    let done_daan = "";
-
-    let shitiPX = self.data.px; //试题的px
+    let shitiPX = self.data.px;//试题的px
     let shitiArray = self.data.shitiArray
     let shiti = shitiArray[shitiPX - 1]; //本试题对象
+
     let xiaoti = shiti.xiaoti;
 
     let sliderShitiArray = self.data.sliderShitiArray;
-    let current = self.data.lastSliderIndex //当前滑动编号
+    let current = self.data.lastSliderIndex//当前滑动编号
     let currentShiti = sliderShitiArray[current];
-    let currentXiaoti = currentShiti.xiaoti
 
-    if (shiti.isAnswer) return;
+    xiaoti[px - 1].isAnswer = true;
+
+    let allDone = true;
 
     for (let i = 0; i < xiaoti.length; i++) {
-      if (px - 1 == i) { //找到对应的小题
-        if (xiaoti[i].isAnswer) return;
-        done_daan = xiaoti[i].TX == 1 ? e.detail.done_daan : xiaoti[i].selectAnswer; //根据单选还是多选得到done_daan,多选需要排序
-        if (xiaoti[i].TX == 2 && xiaoti[i].selectAnswer == undefined) {
-          wx.showToast({
-            title: '还没有作答 !',
-            icon: 'none',
-          })
-          return;
-        }
-        common.changeSelectStatus(done_daan, xiaoti[i], false); //改变试题状态
-        common.changeSelectStatus(done_daan, currentXiaoti[i], false); //改变试题状态
 
-        if (xiaoti[i].flag == 1) shiti.flag = 1; //如果小题错一个,整个材料题就是错的
-        shiti.doneAnswer.push({
-          'px': px,
-          'done_daan': done_daan
-        }); //向本材料题的已答数组中添加已答题目px 和 答案信息
-
-        if (shiti.doneAnswer.length == xiaoti.length) { //说明材料题已经全部作答
-
-          shiti.done_daan = shiti.doneAnswer; //设置该试题已作答的答案数组
-
-          common.changeNum(shiti.flag, self); //更新答题的正确和错误数量
-
-          common.postAnswerToServer(self.data.acode, self.data.username, shiti.id, shiti.flag, "测试", app, API_URL); //向服务器提交答题结果
-
-          common.storeAnswerArray(shiti, self); //只存储答题状态,不做本地存储
-
-          common.setMarkAnswer(shiti, self.data.isModelReal, self.data.isSubmit, self) //更新答题板状态
-
-          common.ifDoneAll(shitiArray, self.data.doneAnswerArray); //判断是不是所有题已经做完
-        }
+      if (xiaoti[i].isAnswer == undefined || xiaoti[i].isAnswer == false) {
+        allDone = false;
       }
+    }
+
+    console.log(allDone)
+    if (allDone) {
+      common.storeAnswerArray(shiti, self) //存储已答题数组
+      common.setWendaMarkAnswer(shiti, self) //更新答题板状态
+      common.ifDoneAll(shitiArray, self.data.doneAnswerArray); //判断是不是所有题已经做完
     }
 
     this.setData({
@@ -452,6 +422,7 @@ Page({
       shitiArray: shitiArray
     })
   },
+
   /**
    * 刚载入时的动画
    */
@@ -591,7 +562,7 @@ Page({
       px: px,
       circular: circular,
       myFavorite: myFavorite,
-      xiaotiCurrent: 0,//没滑动一道题都将材料题小题的滑动框index置为0
+      xiaotiCurrent: 0, //没滑动一道题都将材料题小题的滑动框index置为0
       lastSliderIndex: current,
       checked: false
     })
@@ -602,14 +573,14 @@ Page({
     //如果是材料题就判断是否动画
     if (midShiti.TX == 99) {
       let str = "#q" + px;
-      let questionStr = midShiti.question;//问题的str
-      let height = common.getQuestionHeight(questionStr);//根据问题长度，计算应该多高显示
+      let questionStr = midShiti.question; //问题的str
+      let height = common.getQuestionHeight(questionStr); //根据问题长度，计算应该多高显示
 
       height = height >= 400 ? 400 : height;
 
       let question = self.selectComponent(str);
 
-      animate.blockSpreadAnimation(90, height, question);//占位框动画
+      animate.blockSpreadAnimation(90, height, question); //占位框动画
 
       question.setData({
         style2: "positon: fixed; left: 20rpx;height:" + height + "rpx", //问题框"

@@ -23,7 +23,7 @@ Component({
     isMark:{
       type:Number,
       value:0
-    } 
+    }
   },
 
   /**

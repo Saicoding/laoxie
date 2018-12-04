@@ -39,5 +39,4 @@
   color: #666;
   line-height: 40rpx;
   font-size: 25rpx;
-  text-indent: 40rpx;
 }

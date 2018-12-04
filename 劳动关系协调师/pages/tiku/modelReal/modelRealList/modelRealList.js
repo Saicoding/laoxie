@@ -21,8 +21,8 @@ Page({
   onLoad: function(options) {
     let self = this;
     let user = wx.getStorageSync('user');
-    let username = user.username;
-    let acode = user.acode;
+    let Loginrandom = user.Login_random;;
+    let zcode = user.zcode;
     let tiType = options.ti == "model"?1:2;//获取题的类型
     let title = options.ti == "model" ?"模拟真题":"考前押题";
     wx.setNavigationBarTitle({
@@ -35,7 +35,8 @@ Page({
 
     let px = 1;
 
-    app.post(API_URL, "action=GetTestlist&kid=" + options.kid + "&username=" + username + "&acode=" + acode + "&types=" + tiType, false, true, "","",true,self).then((res) => {
+    console.log("action=GetTestlist&kid=" + options.kid + "&Loginrandom=" + Loginrandom + "&zcode=" + zcode + "&types=" + tiType)
+    app.post(API_URL, "action=GetTestlist&kid=" + options.kid + "&Loginrandom=" + Loginrandom + "&zcode=" + zcode + "&types=" + tiType, false, true, "","",true,self).then((res) => {
       let modelList = res.data.list;
 
       for (let i = 0; i < modelList.length; i++) { 

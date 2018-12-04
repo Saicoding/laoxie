@@ -2,6 +2,9 @@ page {
   background: #f4f8f9;
 }
 
+.page-body{
+}
+
 .live-show {
   position: absolute;
   width: 100%;
