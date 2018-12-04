@@ -4,6 +4,7 @@ let common = require('../../../common/shiti.js');
 let animate = require('../../../common/animate.js')
 let share = require('../../../common/share.js')
 let post = require('../../../common/post.js');
+let isFold = true; //默认都是折叠的
 
 const util = require('../../../utils/util.js')
 //把winHeight设为常量，不要放在data里（一般来说不用于渲染的数据都不能放在data里）
@@ -65,10 +66,11 @@ Page({
       page = ((px - 1) - (px - 1) % 10) / 10 + 1;
     }
 
+    console.log("action=SelectShiti&LoginRandom=" + LoginRandom + "&z_id=" + options.z_id + "&tid=" + options.tid + "&zcode=" + zcode + "&page=" + page)
     app.post(API_URL, "action=SelectShiti&LoginRandom=" + LoginRandom + "&z_id=" + options.z_id + "&tid=" + options.tid + "&zcode=" + zcode + "&page=" + page, false, false, "", "", false, self).then((res) => {
       let shitiArray = res.data.shiti;
       let all_nums = res.data.all_nums;
- 
+
       let pageall = res.data.pageall;
       let prepage = page - 1; //上一页
       let nextPage = page + 1; //下一页
@@ -92,7 +94,7 @@ Page({
           for (let i = 0; i < newWrongShitiArray.length; i++) { //更新shitiArray
             shitiArray[i + (prepage - 1) * 10] = newWrongShitiArray[i];
           }
-          post.zuotiOnload(options, px, circular, myFavorite, shitiArray, user, page,  all_nums, pageall, self) //对数据进行处理和初始化
+          post.zuotiOnload(options, px, circular, myFavorite, shitiArray, user, page, all_nums, pageall, self) //对数据进行处理和初始化
         })
       } else if ((px % 10 >= 6 || px % 10 == 0) && nextPage <= pageall) {
         app.post(API_URL, "action=SelectShiti&LoginRandom=" + LoginRandom + "&z_id=" + options.z_id + "&tid=" + options.tid + "&zcode=" + zcode + "&page=" + nextPage, false, false, "", "", false, self).then((res) => {
@@ -107,7 +109,7 @@ Page({
           for (let i = 0; i < newWrongShitiArray.length; i++) { //更新shitiArray
             shitiArray[i + (nextPage - 1) * 10] = newWrongShitiArray[i];
           }
-          post.zuotiOnload(options, px, circular, myFavorite, shitiArray, user, page,  all_nums, pageall, self) //对数据进
+          post.zuotiOnload(options, px, circular, myFavorite, shitiArray, user, page, all_nums, pageall, self) //对数据进
         })
       } else {
         self.setData({
@@ -136,6 +138,39 @@ Page({
         })
       }
     });
+  },
+
+  /**
+ * 切换问题的动画
+ */
+  _toogleAnimation: function () {
+    let self = this;
+
+    let px = self.data.px; //当前px
+    let str = "#q" + px; //当前问题组件id
+    let question = self.selectComponent(str); //当前问题组件
+
+    let shitiArray = self.data.shitiArray; //当前试题数组
+    let shiti = shitiArray[px - 1]; //当前试题
+    let height = self.data.height;
+
+    if (!shiti.isAnswer && !shiti.confirm) return;
+
+    if (isFold) {
+      question.setData({
+        style2: "positon: fixed; left: 20rpx;height:" + height + "rpx"
+      })
+      // animate.questionSpreadAnimation(90, height, question);
+      animate.blockSpreadAnimation(90, height, question);
+      isFold = false;
+    } else {
+      question.setData({
+        style2: "positon: fixed; left: 20rpx;height:90rpx"
+      })
+      // animate.questionFoldAnimation(height, 90, question);
+      animate.blockFoldAnimation(height, 90, question);
+      isFold = true;
+    }
   },
 
   /**
@@ -186,7 +221,7 @@ Page({
             isLoading: true //设置正在载入中
           })
 
-          app.post(API_URL, "action=SelectShiti&LoginRandom=" + LoginRandom + "&z_id=" + z_id + "&zcode=" + zcode + "&tid=" + tid  + "&page=" + nextPage, false, false, "", true, self).then((res) => {
+          app.post(API_URL, "action=SelectShiti&LoginRandom=" + LoginRandom + "&z_id=" + z_id + "&zcode=" + zcode + "&tid=" + tid + "&page=" + nextPage, false, false, "", true, self).then((res) => {
 
             let newWrongShitiArray = res.data.shiti;
 
@@ -313,7 +348,7 @@ Page({
   /**
    * 问答题作答
    */
-  wendaSelect:function(e){
+  wendaSelect: function(e) {
     let self = this;
     let px = self.data.px;
     let shitiArray = self.data.shitiArray;
@@ -329,9 +364,12 @@ Page({
     this.setData({
       shitiArray: shitiArray,
       sliderShitiArray: sliderShitiArray
+
     })
 
-    common.storeWendaStatus(shiti,self);
+
+
+    common.storeWendaStatus(shiti, self);
 
     common.setWendaMarkAnswer(shiti, self) //更新答题板状态
 
@@ -383,6 +421,38 @@ Page({
 
     common.ifDoneAll(shitiArray, self.data.doneAnswerArray); //判断是不是所有题已经做完
 
+  },
+
+  /**
+ * 材料题点击开始作答按钮
+ */
+  CLZuoti: function (e) {
+    let self = this;
+
+    let str = "#q" + self.data.px;
+    let question = self.selectComponent(str);
+
+    let px = self.data.px;
+    let lastSliderIndex = self.data.lastSliderIndex;
+    let shitiArray = self.data.shitiArray;
+    let sliderShitiArray = self.data.sliderShitiArray;
+    let shiti = shitiArray[px - 1];
+    let height = self.data.height;
+
+    let sliderShiti = sliderShitiArray[lastSliderIndex];
+    shiti.confirm = true;
+    sliderShiti.confirm = true;
+
+    question.setData({
+      style2: "positon: fixed; left: 20rpx;height:90rpx", //问题框"   
+    })
+    animate.blockFoldAnimation(height, 90, question);
+    isFold = true;
+
+    self.setData({
+      shitiArray: shitiArray,
+      sliderShitiArray: sliderShitiArray
+    })
   },
 
   /**

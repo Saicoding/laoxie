@@ -80,6 +80,17 @@ function initShiti(shiti) {
     shiti.tx = "问答题"
   }
 }
+
+/**
+ * 初始化问答题
+ */
+function initWenda(shitiArray){
+  for(let i = 0;i<shitiArray.length;i++){
+    let shiti = shitiArray[i].isAnswer = false;
+  }
+}
+
+
 /**
  * 初始化新请求的错题页的试题的答案为空
  */
@@ -291,7 +302,6 @@ function setModelRealCLShitiPx(shitiArray) {
  */
 function initMarkAnswer(nums, self) {
   let markAnswerItems = self.data.markAnswerItems;
-  console.log(nums)
   let lines = Math.ceil(nums / 9);
   let answerHeight = lines > 5 ? 460 : lines * 90 + 10;
 
@@ -787,8 +797,6 @@ function changeModelRealSelectStatus(done_daan, shiti, ifSubmit) {
  * 对已答试题进行处理（练习题）
  */
 function processDoneAnswer(done_daan, shiti, self) {
-  console.log(done_daan)
-  console.log(shiti)
   if (done_daan != "" && done_daan != undefined) {
     changeSelectStatus(done_daan, shiti) //根据得到的已答数组更新试题状态
     shiti.isAnswer = true;
@@ -866,7 +874,7 @@ function postAnswerToServer(LoginRandom, zcode, id, flag, done_daan, app, API_UR
   //向服务器提交做题结果
 
   app.post(API_URL, "action=saveShitiResult&LoginRandom=" + LoginRandom + "&zcode=" + zcode + "&tid=" + id + "&flag=" + flag + "&answer=" + done_daan, false).then((res) => {
-    console.log(res)
+
   })
 }
 
@@ -965,6 +973,7 @@ function lianxiRestart(self) {
   let zcode = user.zcode;
   let z_id = self.data.z_id;
   let pageArray = self.data.pageArray;
+  let tid = self.data.tid;
 
   initShitiArrayDoneAnswer(shitiArray); //将所有问题已答置空
 
@@ -1001,6 +1010,8 @@ function lianxiRestart(self) {
 
       initShiti(midShiti, self); //初始化试题对象
 
+      
+
       if (shitiArray.length != 1) {
         nextShiti = shitiArray[1];
         initShiti(nextShiti, self); //初始化试题对象
@@ -1028,6 +1039,9 @@ function lianxiRestart(self) {
       })
     })
   } else {
+    if (tid == "5") {//如果是问答题
+      initWenda(shitiArray);
+    }
     //得到swiper数组
     let midShiti = shitiArray[0]; //中间题
     let nextShiti = shitiArray[1]; //后一题
@@ -1325,5 +1339,6 @@ module.exports = {
   getQuestionHeight: getQuestionHeight,
   storeWendaStatus: storeWendaStatus,
   setWendaMarkAnswer: setWendaMarkAnswer,
-  setWendaMarkAnswerItems: setWendaMarkAnswerItems
+  setWendaMarkAnswerItems: setWendaMarkAnswerItems,
+  initWenda: initWenda
 }

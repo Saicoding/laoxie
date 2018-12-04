@@ -24,7 +24,9 @@
 
           <!--问答题-->
           <view style="margin-botoom:50rpx;" wx:if="{{tid == '5'}}">
-            <view wx:if="{{shiti.isAnswer}}" class = "answer">{{shiti.answer}}</view>
+            <view class="answer">
+              <rich-text nodes="<span style = 'color:#43a2fe'>答案：</span>{{shiti.answer}}" wx:if="{{shiti.isAnswer}}"></rich-text>
+            </view>
             <view class='submit_answer' wx:if="{{!shiti.isAnswer}}" bindtap="wendaSelect">查看答案</view>
             <!-- 解析 -->
             <jiexi isAnswer="{{shiti.isAnswer}}" jiexi="{{shiti.jiexi}}"></jiexi>
@@ -32,9 +34,10 @@
 
           <!--材料题-->
           <view style="margin-botoom:50rpx;" wx:if="{{tid == '99' }}">
-            <view wx:if="{{!shiti.confirm&&!shiti.isAnswer}}" class="cailiaoZuoti">
+            <view wx:if="{{!shiti.confirm&&(!shiti.isAnswer || shiti.isAnswer == undefined)}}" class="cailiaoZuoti">
               <button class="cailiaoZuoti-btn" bindtap='CLZuoti'>答题</button>
             </view>
+
             <!-- 材料题小题的滑动框 -->
             <view wx:if="{{shiti.confirm||shiti.isAnswer}}">
               <swiper current="{{xiaotiCurrent}}" indicator-dots vertical="true" skip-hidden-item-layout="true" class="swiper-xiaoti" style="height:{{windowHeight-280}}rpx" indicator-active-color="#1d9bf7">
@@ -43,16 +46,18 @@
                     <!--问题-->
                     <question class="question" num_color="{{xiaoti.num_color}}" px="{{index+1}}" tx="{{xiaoti.tx}}" question="{{xiaoti.question}}"></question>
 
-                    <!--单选题-->
-                    <view wx:if="{{xiaoti.TX == 1}}">
-                      <singleSelect data-px="{{index+1}}" shiti="{{xiaoti}}" checked="{{checked}}" bindanswerSelect="_CLAnswerSelect"> </singleSelect>
+                    <!--问答题-->
+                    <view style="margin-botoom:50rpx;" wx:if="{{tid == '5'}}">
+                      <view class="answer">
+                        <rich-text nodes="<span style = 'color:#43a2fe'>答案：</span>{{shiti.answer}}" wx:if="{{shiti.isAnswer}}"></rich-text>
+                      </view>
+                      
+                      <view class='submit_answer' wx:if="{{!shiti.isAnswer}}" bindtap="wendaSelect">查看答案</view>
+                      <!-- 解析 -->
+                      <jiexi isAnswer="{{shiti.isAnswer}}" jiexi="{{shiti.jiexi}}"></jiexi>
+                      
                     </view>
-                    <!--多选题-->
-                    <view wx:if="{{xiaoti.TX ==2}}">
-                      <multiSelect data-px="{{index+1}}" shiti="{{xiaoti}}" checked="{{checked}}" bindcheckVal="_CLCheckVal"></multiSelect>
-                      <button data-px="{{index+1}}" class='submit_answer' wx:if="{{!xiaoti.isAnswer}}" bindtap="_CLAnswerSelect">确认选择</button>
 
-                    </view>
                   </swiper-item>
                 </block>
               </swiper>

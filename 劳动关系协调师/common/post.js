@@ -120,6 +120,27 @@ function zuotiOnload(options, px, circular, myFavorite, shitiArray, user, page, 
     lastSliderIndex: lastSliderIndex,//默认滑动条一开始是0
     isLoaded: true, //是否已经载入完毕,用于控制过场动画
   });
+
+  //如果是材料题就有动画
+  if (midShiti.TX == 99) {
+    let str = "#q" + px;
+    let questionStr = midShiti.question;//问题的str
+    let height = common.getQuestionHeight(questionStr);//根据问题长度，计算应该多高显示
+
+    height = height >= 400 ? 400 : height;
+
+    let question = self.selectComponent(str);
+
+    animate.blockSpreadAnimation(90, height, question);//占位框动画
+
+    question.setData({
+      style2: "positon: fixed; left: 20rpx;height:" + height + "rpx", //问题框"
+    })
+
+    self.setData({
+      height: height,
+    })
+  }
 }
 
 /**
