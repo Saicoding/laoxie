@@ -1,6 +1,6 @@
 <!--components/Dialog/dialog.wxml-->
 <view hidden="{{!isShow}}" class="container-out" catchtap='stopBubbling' animation= "{{showAnimate}}">
-  <scroll-view animation= "{{showAnimate}}" scroll-y="true" class="container-in" style='top:{{windowHeight-650}}rpx;height:{{answerHeight}}rpx'>
+  <scroll-view animation= "{{showAnimate}}" scroll-y="true" class="container-in" style="top:{{windowHeight-650}}rpx;height:{{answerHeight}}rpx; {{isLianxi?'border-radius: 15rpx 15rpx 0rpx 0rpx':'border-radius: 15rpx 15rpx 15rpx 15rpx'}} ">
     <view wx:for="{{markAnswerItems}}" wx:key="item">
       <view data-cl="{{item.cl}}" data-px="{{index+1}}" catchtap='_tapEvent' class="icon" style="{{item.style}};border-radius:{{item.radius}}rpx;" hover-class='select'>
         <view style="margin:0 auto;">

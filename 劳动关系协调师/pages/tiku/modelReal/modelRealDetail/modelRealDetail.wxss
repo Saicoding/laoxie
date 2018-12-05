@@ -9,6 +9,13 @@
   margin:0 auto;
 }
 
+.answer{
+  font-size:30rpx;
+  margin-top:40rpx;
+  text-indent: 64rpx;
+  padding:0 20rpx;
+}
+
 .question {
   line-height: 60rpx;
   width: 96%;

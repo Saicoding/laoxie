@@ -93,6 +93,25 @@ function initWenda(shitiArray){
   }
 }
 
+/**
+ * 真题初始化答题
+ */
+function initModelWendaAndCL(shitiArray){
+  for (let i = 0; i < shitiArray.length; i++) {
+    let shiti = shitiArray[i];
+    if(shiti.TX == 5){
+      shiti.isAnswer = false;
+      shiti.done_daan = "";
+    }else if(shiti.TX==99){
+      for(let j = 0 ;j<shiti.xiaoti.length;j++){
+        let xt = shiti.xiaoti[j];
+        xt.isAnswer = false;
+        xt.done_daan = "";
+      }
+    }
+  } 
+}
+
 
 /**
  * 初始化新请求的错题页的试题的答案为空
@@ -297,7 +316,18 @@ function setModelRealCLShitiPx(shitiArray) {
     num++;
     let shiti = shitiArray[i];
     shiti.px = i + 1;
+    //试题编号加上中间如果有材料题的数量
+    if (shiti.TX == 99) { //如果是材料题
+      shiti.clpx = num;
+      num--;
+      for (let j = 0; j < shiti.xiaoti.length; j++) {
+        let ti = shiti.xiaoti[j];
+        ti.px = num + 1;
+        num++;
+      }
+    }
   }
+
 }
 
 /**
@@ -336,8 +366,12 @@ function initModelRealMarkAnswer(newShitiArray, self) {
         'cl': newShiti.cl
       });
     }
-
-    markAnswerItems[i].radius = newShiti.TX == 1 ? 50 : 10; //映射试题种类
+    
+    if (newShiti.TX == 1 || newShiti.TX == 5){
+      markAnswerItems[i].radius = 50;
+    }else{
+      markAnswerItems[i].radius = 10;
+    }
   }
 
   self.markAnswer.setData({
@@ -355,7 +389,7 @@ function getNewShitiArray(shitiArray) {
   for (let i = 0; i < shitiArray.length; i++) {
     let shiti = shitiArray[i]; //原试题
 
-    if (shiti.TX == 1 || shiti.TX == 2) {
+    if (shiti.TX == 1 || shiti.TX == 2 || shiti.TX == 5) {
       newShitiArray.push(shiti);
     } else {
       for (let j = 0; j < shiti.xiaoti.length; j++) {
@@ -464,7 +498,6 @@ function setModelRealMarkAnswerItems(jie_answer_array, nums, isModelReal, isSubm
 /**
  * 问答题设置答题板
  */
-
 function setWendaMarkAnswerItems(jie_answer_array, self) {
   let markAnswerItems = self.data.markAnswerItems; //得到答题板组件的已答
   for (let i = 0; i < jie_answer_array.length; i++) {
@@ -543,6 +576,10 @@ function setMarkAnswer(shiti, isModelReal, isSubmit, self) {
     style = "background:#fa4b5c;color:white;border:1rpx solid #fa4b5c; "
   }
 
+  if(shiti.TX == 5){
+    style = "background:#ffcf47;color:white;border:1rpx solid #ffcf47; "
+  }
+
   markAnswerItems[px - 1].select = shiti.tx;
   markAnswerItems[px - 1].isRight = shiti.flag
   markAnswerItems[px - 1].style = style;
@@ -615,6 +652,24 @@ function storeAnswerStatus(shiti, self) {
   })
 }
 
+/**
+ * 材料题设置单个答题板
+ */
+function setCLMarkAnswer(shiti, shitiPx, self) {
+  let markAnswerItems = self.markAnswer.data.markAnswerItems; //得到答题板组件的已答
+  let px = shiti.px;
+  let style = "background:#ffc13e;color:white;border:1rpx solid #ffc13e; "
+
+  markAnswerItems[px - 1].select = shiti.tx;
+  markAnswerItems[px - 1].isRight = shiti.flag
+  markAnswerItems[px - 1].style = style;
+  markAnswerItems[px - 1].cl = shitiPx
+
+  self.markAnswer.setData({
+    markAnswerItems: markAnswerItems
+  })
+}
+
 /**,
  * 更新存储已答试题（单选和多选）(真题，押题)
  */
@@ -626,9 +681,9 @@ function storeModelRealAnswerStatus(shiti, self) {
 
   let answer_nums_array = wx.getStorageSync(self.data.tiTypeStr + "modelReal" + id + username);
 
-  let flag = false;
-
   let obj = {};
+
+  let flag = false;
 
   obj = {
     "id": shiti.id,
@@ -737,6 +792,10 @@ function changeSelectStatus(done_daan, shiti, ifSubmit) {
       }
       shiti.isAnswer = true;
       break;
+
+    case "问答题":
+      shiti.isAnswer = true;
+    break;
   }
   shiti.flag = flag; //答案是否正确
 }
@@ -745,14 +804,10 @@ function changeSelectStatus(done_daan, shiti, ifSubmit) {
  * 更改选择状态（真题和押题）
  */
 function changeModelRealSelectStatus(done_daan, shiti, ifSubmit) {
-  shiti.srcs = { //初始图片对象(多选)
-    "A": "/imgs/A.png",
-    "B": "/imgs/B.png",
-    "C": "/imgs/C.png",
-    "D": "/imgs/D.png",
-    "E": "/imgs/E.png",
-  };
-  let flag = 0; //初始化正确还是错误
+
+  let flag = 3; //第三种状态
+
+  if (!ifSubmit) shiti.done_daan = done_daan; //已经做的选择
 
   switch (shiti.tx) {
     case "单选题":
@@ -764,7 +819,7 @@ function changeModelRealSelectStatus(done_daan, shiti, ifSubmit) {
         flag = 0;
       }
 
-      if (!ifSubmit) shiti.done_daan = done_daan; //已经做的选择
+      
       break;
     case "多选题":
       //初始化多选的checked值
@@ -789,6 +844,11 @@ function changeModelRealSelectStatus(done_daan, shiti, ifSubmit) {
         flag = 1;
       }
       break;
+    case "问答题":
+      if (done_daan == "viewed"){
+        shiti.isAnswer = true;
+      }
+    break;
   }
   // shiti.isAnswer = true;
   shiti.flag = flag; //答案是否正确
@@ -1096,8 +1156,10 @@ function initShitiArrayDoneAnswer(shitiArray) {
  */
 function restartModelReal(self) {
   let shitiArray = self.data.shitiArray;
+  let shitiType = shitiArray[0].TX;
   let user = self.data.user;
   let username = user.username;
+  let text = "立即交卷"
 
   initShitiArrayDoneAnswer(shitiArray); //将所有问题已答置空
 
@@ -1127,6 +1189,13 @@ function restartModelReal(self) {
 
   initModelRealMarkAnswer(self.data.newShitiArray, self); //初始化答题板数组
 
+  if(shitiType == 5 || shitiType == 99){//如果是问答题或者材料题
+    initModelWendaAndCL(shitiArray);
+    text = "重新评测";
+  }
+
+  console.log(shitiArray)
+
   let answer_nums_array = wx.getStorageSync(self.data.tiTypeStr + "modelReal" + self.data.id + username); //将已答答案置空
   wx.setStorage({
     key: self.data.tiTypeStr + "modelReal" + self.data.id + username,
@@ -1142,7 +1211,7 @@ function restartModelReal(self) {
     shitiArray: shitiArray,
     isSubmit: false,
     checked: false,
-    text: "立即交卷"
+    text: text
   })
 }
 
@@ -1342,5 +1411,6 @@ module.exports = {
   storeWendaStatus: storeWendaStatus,
   setWendaMarkAnswer: setWendaMarkAnswer,
   setWendaMarkAnswerItems: setWendaMarkAnswerItems,
-  initWenda: initWenda
+  initWenda: initWenda,
+  setCLMarkAnswer: setCLMarkAnswer
 }

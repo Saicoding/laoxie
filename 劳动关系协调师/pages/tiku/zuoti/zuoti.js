@@ -66,8 +66,6 @@ Page({
       page = ((px - 1) - (px - 1) % 10) / 10 + 1;
     }
 
-    console.log("action=SelectShiti&LoginRandom=" + LoginRandom + "&z_id=" + options.z_id + "&tid=" + options.tid + "&zcode=" + zcode + "&page=" + page)
-
     app.post(API_URL, "action=SelectShiti&LoginRandom=" + LoginRandom + "&z_id=" + options.z_id + "&tid=" + options.tid + "&zcode=" + zcode + "&page=" + page, false, false, "", "", false, self).then((res) => {
       let shitiArray = res.data.shiti;
       let all_nums = res.data.all_nums;
