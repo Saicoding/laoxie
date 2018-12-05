@@ -37,7 +37,7 @@ Page({
 
     console.log("action=SelectZj&Loginrandom=" + Loginrandom + "&zcode=" + zcode)
 
-    app.post(API_URL, "action=SelectZj&Loginrandom=" + Loginrandom + "&zcode=" + zcode, true, true, "请稍后").then((res) => { //得到上一步设置的题库下的所有章节
+    app.post(API_URL, "action=SelectZj&Loginrandom=" + Loginrandom + "&zcode=" + zcode, true, false, "请稍后").then((res) => { //得到上一步设置的题库下的所有章节
       console.log(res)
       this.setZhangjie(res.data.list); //得到当前题库的缓存,并设置变量:1.所有题库数组 2.要显示的题库id 3.要显示的题库index
       let zhangjie = res.data.zhangjielist //得到所有章节
@@ -425,13 +425,13 @@ Page({
    * 导航到模拟真题
    */
   GOModelReal: function(e) {
+    let self = this;
     this.waterWave.containerTap(e);
+    let kid = self.data.zhangjie_id;
+    if (kid == undefined) return;
     if (buttonClicked) return;
     buttonClicked = true;
-    let self = this;
     let ti = e.currentTarget.dataset.ti; //题型(押题,真题)
-
-    let kid = self.data.zhangjie_id;
     let url1 = '/pages/tiku/modelReal/modelRealList/modelRealList?kid=' + kid + "&ti=" + ti;
 
     wx.navigateTo({

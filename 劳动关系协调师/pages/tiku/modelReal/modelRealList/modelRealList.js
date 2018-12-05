@@ -35,7 +35,6 @@ Page({
 
     let px = 1;
 
-    console.log("action=GetTestlist&kid=" + options.kid + "&Loginrandom=" + Loginrandom + "&zcode=" + zcode + "&types=" + tiType)
     app.post(API_URL, "action=GetTestlist&kid=" + options.kid + "&Loginrandom=" + Loginrandom + "&zcode=" + zcode + "&types=" + tiType, false, true, "","",true,self).then((res) => {
       let modelList = res.data.list;
 

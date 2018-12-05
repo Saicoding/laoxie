@@ -73,13 +73,13 @@ function initShiti(shiti) {
         ti.C_checked = false;
         ti.D_checked = false;
         ti.E_checked = false;
-      } else if(ti.TX == 5){
-        ti.num_color = "#ffc122";
+      } else if (ti.TX == 5) {
+        ti.num_color = "#ff6201";
         ti.tx = "问答题"
       }
     }
   } else if (TX == 5) { //问答题
-    shiti.num_color = "#ffc122";
+    shiti.num_color = "#ff6201";
     shiti.tx = "问答题"
   }
 }
@@ -87,29 +87,43 @@ function initShiti(shiti) {
 /**
  * 初始化问答题
  */
-function initWenda(shitiArray){
-  for(let i = 0;i<shitiArray.length;i++){
+function initWenda(shitiArray) {
+  for (let i = 0; i < shitiArray.length; i++) {
     let shiti = shitiArray[i].isAnswer = false;
+  }
+}
+
+/**
+ * 初始化材料题
+ */
+function initCailiao(shitiArray) {
+  for (let i = 0; i < shitiArray.length; i++) {
+    let shiti = shitiArray[i];
+    shiti.confirm = false;
+    for (let j = 0; j < shiti.xiaoti.length; j++) {
+      let xt = shiti.xiaoti[j];
+      xt.isAnswer = false;
+    }
   }
 }
 
 /**
  * 真题初始化答题
  */
-function initModelWendaAndCL(shitiArray){
+function initModelWendaAndCL(shitiArray) {
   for (let i = 0; i < shitiArray.length; i++) {
     let shiti = shitiArray[i];
-    if(shiti.TX == 5){
+    if (shiti.TX == 5) {
       shiti.isAnswer = false;
       shiti.done_daan = "";
-    }else if(shiti.TX==99){
-      for(let j = 0 ;j<shiti.xiaoti.length;j++){
+    } else if (shiti.TX == 99) {
+      for (let j = 0; j < shiti.xiaoti.length; j++) {
         let xt = shiti.xiaoti[j];
         xt.isAnswer = false;
         xt.done_daan = "";
       }
     }
-  } 
+  }
 }
 
 
@@ -366,10 +380,10 @@ function initModelRealMarkAnswer(newShitiArray, self) {
         'cl': newShiti.cl
       });
     }
-    
-    if (newShiti.TX == 1 || newShiti.TX == 5){
+
+    if (newShiti.TX == 1 || newShiti.TX == 5) {
       markAnswerItems[i].radius = 50;
-    }else{
+    } else {
       markAnswerItems[i].radius = 10;
     }
   }
@@ -475,7 +489,7 @@ function setModelRealMarkAnswerItems(jie_answer_array, nums, isModelReal, isSubm
 
     if (isModelReal && isSubmit == false) { //如果是真题或者押题并且没有提交
       if (jie_answer_array[i].done_daan != "") { //如果答案不为空
-        style = "color:white;border:1rpx solid #fd7f2b;background: linear-gradient(to right, #fd781f, #f9ba91);"
+        style = "color:white;border:1rpx solid #ff6201;background: #ff6201;"
       } else { //如果是空
         style = "border:1rpx solid #9c9c9c;"
       }
@@ -523,7 +537,7 @@ function setMarkAnswerItems(jie_answer_array, nums, isModelReal, isSubmit, self)
     let style = "";
     if (isModelReal && isSubmit == false) { //如果是真题或者押题
       if (jie_answer_array[i].done_daan != "") { //如果答案不为空
-        style = "color:white;border:1rpx solid #fd7f2b;background: linear-gradient(to right, #fd781f, #f9ba91);"
+        style = "color:white;border:1rpx solid #ff6201;background: #ff6201;"
       } else { //如果是空
         style = "border:1rpx solid #9c9c9c;";
       }
@@ -569,14 +583,14 @@ function setMarkAnswer(shiti, isModelReal, isSubmit, self) {
   let px = shiti.px;
   let style = "";
   if (isModelReal && isSubmit == false) { //如果是真题或者押题
-    style = "color:white;border:1rpx solid #fd7f2b;background: linear-gradient(to right, #fd781f, #f9ba91);"
+    style = "color:white;border:1rpx solid #ff6201;background: #ff6201;"
   } else if (shiti.flag == 0) { //如果题是正确的
     style = "background:#90dd35;color:white;border:1rpx solid #90dd35; "
   } else if (shiti.flag == 1) { //如果题是错误的
     style = "background:#fa4b5c;color:white;border:1rpx solid #fa4b5c; "
   }
 
-  if(shiti.TX == 5){
+  if (shiti.TX == 5) {
     style = "background:#ffcf47;color:white;border:1rpx solid #ffcf47; "
   }
 
@@ -795,7 +809,7 @@ function changeSelectStatus(done_daan, shiti, ifSubmit) {
 
     case "问答题":
       shiti.isAnswer = true;
-    break;
+      break;
   }
   shiti.flag = flag; //答案是否正确
 }
@@ -819,7 +833,7 @@ function changeModelRealSelectStatus(done_daan, shiti, ifSubmit) {
         flag = 0;
       }
 
-      
+
       break;
     case "多选题":
       //初始化多选的checked值
@@ -845,10 +859,10 @@ function changeModelRealSelectStatus(done_daan, shiti, ifSubmit) {
       }
       break;
     case "问答题":
-      if (done_daan == "viewed"){
+      if (done_daan == "viewed") {
         shiti.isAnswer = true;
       }
-    break;
+      break;
   }
   // shiti.isAnswer = true;
   shiti.flag = flag; //答案是否正确
@@ -892,7 +906,7 @@ function setRightWrongNums(doneAnswerArray) {
     let doneAnswer = doneAnswerArray[i];
     if (doneAnswer.isRight == 0) {
       right++;
-    } else if (doneAnswer.isRight == 1){
+    } else if (doneAnswer.isRight == 1) {
       wrong++;
     }
   }
@@ -986,7 +1000,6 @@ function storeModelRealLastShiti(px, self) {
  * 判断所有本节题已经做完
  */
 function ifDoneAll(shitiArray, doneAnswerArray) {
-  console.log(doneAnswerArray)
   if (shitiArray.length == doneAnswerArray.length) { //所有题都答完了
     wx.showToast({
       title: '所有题已经作答',
@@ -1072,7 +1085,7 @@ function lianxiRestart(self) {
 
       initShiti(midShiti, self); //初始化试题对象
 
-      
+
 
       if (shitiArray.length != 1) {
         nextShiti = shitiArray[1];
@@ -1101,21 +1114,30 @@ function lianxiRestart(self) {
       })
     })
   } else {
-    if (tid == "5") {//如果是问答题
+    if (tid == "5") { //如果是问答题
       initWenda(shitiArray);
+    } else if (tid == "99") { //如果是材料题
+      initCailiao(shitiArray);
     }
+
     //得到swiper数组
     let midShiti = shitiArray[0]; //中间题
-    let nextShiti = shitiArray[1]; //后一题
     initShiti(midShiti, self); //初始化试题对象
-    initShiti(nextShiti, self); //初始化试题对象
+
+    if (shitiArray.length > 1) {
+      let nextShiti = shitiArray[1]; //后一题
+      initShiti(nextShiti, self); //初始化试题对象
+    }
 
     let sliderShitiArray = [];
 
-    midShiti.isAnswer =false;
-    nextShiti.isAnswer = false;
+    midShiti.isAnswer = false;
     sliderShitiArray[0] = midShiti;
-    sliderShitiArray[1] = nextShiti;
+
+    if (shitiArray.length > 1) {
+      nextShiti.isAnswer = false;
+      sliderShitiArray[1] = nextShiti;
+    }
 
     let myFavorite = midShiti.favorite;
 
@@ -1144,10 +1166,11 @@ function initShitiArrayDoneAnswer(shitiArray) {
       case 2:
         shitiArray[i].done_daan = [];
         break;
-      case 3:
-        shitiArray[i].isAnswer = false;
+      case 5:
+        shitiArray[i].done_daan = "";
         break;
     }
+    shitiArray[i].isAnswer = false;
   }
 }
 
@@ -1189,12 +1212,10 @@ function restartModelReal(self) {
 
   initModelRealMarkAnswer(self.data.newShitiArray, self); //初始化答题板数组
 
-  if(shitiType == 5 || shitiType == 99){//如果是问答题或者材料题
+  if (shitiType == 5 || shitiType == 99) { //如果是问答题或者材料题
     initModelWendaAndCL(shitiArray);
     text = "重新评测";
   }
-
-  console.log(shitiArray)
 
   let answer_nums_array = wx.getStorageSync(self.data.tiTypeStr + "modelReal" + self.data.id + username); //将已答答案置空
   wx.setStorage({

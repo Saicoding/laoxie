@@ -5,7 +5,6 @@ let animate = require('animate.js')
  * 练习题
  */
 function zuotiOnload(options, px, circular, myFavorite, shitiArray, user, page, all_nums, pageall,self){
-  console.log(shitiArray)
   let username = user.username;
   let LoginRandom = user.Login_random;
   let zcode = user.zcode;
@@ -42,10 +41,14 @@ function zuotiOnload(options, px, circular, myFavorite, shitiArray, user, page, 
       //根据章是否有子节所有已经回答的题
       let doneAnswerArray = res1.data[self.data.zhangIdx][self.data.jieIdx];
 
-      if (options.tid !="5"){
-        common.setMarkAnswerItems(doneAnswerArray, options.nums, self.data.isModelReal, self.data.isSubmit, self); //设置答题板数组 
-      }else{
+      console.log(doneAnswerArray)
+
+      if (options.tid =="5"){
         common.setWendaMarkAnswerItems(doneAnswerArray, self)
+      } else if (options.tid =="99"){
+        common.setWendaMarkAnswerItems(doneAnswerArray, self)
+      }else{
+        common.setMarkAnswerItems(doneAnswerArray, options.nums, self.data.isModelReal, self.data.isSubmit, self); //设置答题板数组 
       }
           
 
@@ -56,6 +59,12 @@ function zuotiOnload(options, px, circular, myFavorite, shitiArray, user, page, 
         
         if (options.tid == "5"){//如果是问答题就设置已回答
           shitiArray[doneAnswer.px - 1].isAnswer = true;//设置已答试题的答案
+        } else if (options.tid == "99"){
+          shitiArray[doneAnswer.px - 1].confirm = true;
+          for (let j = 0; j < shitiArray[doneAnswer.px - 1].xiaoti.length;j++){
+            let xt = shitiArray[doneAnswer.px - 1].xiaoti[j];
+            xt.isAnswer = true;
+          }
         }
       }
       

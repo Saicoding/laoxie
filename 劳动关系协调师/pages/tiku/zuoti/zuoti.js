@@ -467,6 +467,8 @@ Page({
       return;
     }
 
+    console.log(shiti.isAnswer)
+
     if (shiti.isAnswer) return;
 
     common.changeSelectStatus(done_daan, shiti, false); //改变试题状态

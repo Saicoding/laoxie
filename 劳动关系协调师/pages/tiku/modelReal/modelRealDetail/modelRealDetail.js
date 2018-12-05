@@ -156,7 +156,7 @@ Page({
               text: "重新评测"
             })     
           } 
-
+          console.log(doneAnswerArray)
           common.setModelRealMarkAnswerItems(doneAnswerArray, self.data.nums, self.data.isModelReal, self.data.isSubmit, self); //更新答题板状态
 
           //映射已答题目的已作答的答案到shitiArray
@@ -625,7 +625,6 @@ Page({
 
     shiti.done_daan = shiti.doneAnswer; //设置该试题已作答的答案数组
     common.storeModelRealAnswerStatus(shiti, self); //存储答题状态
-
     console.log(shiti.doneAnswer)
     if (shiti.doneAnswer.length == xiaoti.length) { //说明材料题已经全部作答
       common.ifDoneAll(shitiArray, self.data.doneAnswerArray); //判断是不是所有题已经做完
