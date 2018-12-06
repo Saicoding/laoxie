@@ -82,7 +82,7 @@
 
   <!-- 载入动画 -->
   <view wx:if="{{!isLoaded}}">
-    <image class="loading-img" src="/imgs/timg.gif" mode="aspectFit" style="margin-top:-100rpx;"></image>
+    <image class="loading-img" src="/imgs/timg.gif" mode="aspectFit" style="margin-top:0rpx;"></image>
   </view>
 </view>
 

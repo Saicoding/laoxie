@@ -10,9 +10,10 @@
 }
 
 .loading-img{
-  width: 750rpx;
-  height:458rpx;
-  margin:0 auto;
+  display: block;
+  width: 300rpx;
+  height: 150rpx;
+  margin: 200rpx auto;
 }
 
 .question_cailiao1 {
@@ -49,7 +50,7 @@
   margin:50rpx auto;
   height:80rpx;
   border-radius: 60rpx;
-  background: #388ff8;
+  background: #ff6201;
   color:white;
   line-height: 80rpx;
   border:1rpx solid white;
@@ -81,7 +82,7 @@ page {
   width:300rpx;
   height:80rpx;
   border-radius: 60rpx;
-  background: #388ff8;
+  background: #ff6201;
   color:white;
   margin-top:40rpx;
   line-height: 80rpx;

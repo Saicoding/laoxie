@@ -3,7 +3,7 @@
     手机号登录
   </view>
   <view class ="phoneNum">
-    <input class ="phoneNUm-input" placeholder='请输入手机号码' auto-focus bindinput="phoneInput"/>
+    <input type = "number" class ="phoneNUm-input" placeholder='请输入手机号码' auto-focus bindinput="phoneInput"/>
   </view>
   <view class ="pwd">
     <input type = "password" class = "pwd-input" placeholder = '请输入密码' bindinput="pwdInput"/>

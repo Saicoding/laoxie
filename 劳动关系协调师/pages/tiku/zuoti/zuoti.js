@@ -229,7 +229,7 @@ Page({
             isLoading: true //设置正在载入中
           })
 
-          app.post(API_URL, "action=SelectShiti&LoginRandom=" + LoginRandom + "&z_id=" + z_id + "&zcode=" + zcode + "&tid=" + tid + "&page=" + nextPage, true, false, "载入中", true, self).then((res) => {
+          app.post(API_URL, "action=SelectShiti&LoginRandom=" + LoginRandom + "&z_id=" + z_id + "&zcode=" + zcode + "&tid=" + tid + "&page=" + nextPage, false, false, "载入中", true, self).then((res) => {
 
             let newWrongShitiArray = res.data.shiti;
 

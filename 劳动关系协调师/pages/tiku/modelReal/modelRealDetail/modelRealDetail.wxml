@@ -39,7 +39,7 @@
             </view>
             <!-- 材料题小题的滑动框 -->
             <view wx:if="{{shiti.confirm||shiti.isAnswer}}">
-              <swiper current="{{xiaotiCurrent}}" indicator-dots vertical="true" skip-hidden-item-layout="true" class="swiper-xiaoti" style="height:{{windowHeight-280}}rpx" indicator-active-color="#1d9bf7">
+              <swiper current="{{xiaotiCurrent}}" indicator-dots vertical="true" skip-hidden-item-layout="true" class="swiper-xiaoti" style="height:{{windowHeight-280}}rpx" indicator-active-color="#ff6201">
                 <block wx:for="{{shiti.xiaoti}}" wx:for-item="xiaoti" wx:key="ti">
                   <swiper-item>
                     <!--问题-->
@@ -69,7 +69,7 @@
 
 <!-- 载入动画 -->
 <view wx:if="{{!isLoaded}}">
-  <image class="loading-img" src="/imgs/timg.gif" mode="aspectFit" style="margin-top:{{windowHeight/2-400}}rpx;"></image>
+  <image class="loading-img" src="/imgs/timg.gif" mode="aspectFit" ></image>
 </view>
 
 <!-- 底部正确错误个数统计条 -->

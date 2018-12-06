@@ -12,8 +12,8 @@ function initShiti(shiti) {
 
   //给试题设置章idx 节idx 和默认已做答案等
 
-  if (TX == 1) { //单选
-    shiti.num_color = "#0197f6";
+  if (TX == 1) {//单选
+    shiti.num_color = "#ff7209";
     shiti.tx = "单选题"
     shiti.srcs = { //定义初始图片对象(单选)
       "A": "/imgs/A.png",
@@ -22,8 +22,8 @@ function initShiti(shiti) {
       "D": "/imgs/D.png",
       "E": "/imgs/E.png"
     }
-  } else if (TX == 2) { //多选
-    shiti.num_color = "#2ac414";
+  } else if (TX == 2) {//多选
+    shiti.num_color = "#a2c81b";
     shiti.tx = "多选题"
     shiti.srcs = { //定义初始图片对象(多选)
       "A": "/imgs/A.png",
@@ -38,7 +38,7 @@ function initShiti(shiti) {
     shiti.D_checked = false;
     shiti.E_checked = false;
   } else if (TX == 99) { //材料题
-    shiti.num_color = "#eaa91d";
+    shiti.num_color = "#ffc122";
     shiti.tx = "材料题";
     shiti.doneAnswer = [];
 
@@ -48,7 +48,7 @@ function initShiti(shiti) {
       ti.isAnswer = false; //默认不回答
 
       if (ti.TX == 1) {
-        ti.num_color = "#0197f6";
+        ti.num_color = "#ff7209";
         ti.tx = "单选题";
         ti.checked = false;
         ti.srcs = { //定义初始图片对象(单选)
@@ -58,7 +58,7 @@ function initShiti(shiti) {
           "D": "/imgs/D.png"
         };
       } else if (ti.TX == 2) {
-        ti.num_color = "#2ac414";
+        ti.num_color = "#a2c81b";
         ti.tx = "多选题";
         ti.checked = false;
         ti.srcs = { //定义初始图片对象(多选)
