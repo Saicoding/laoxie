@@ -75,9 +75,6 @@ Page({
     let zcode = user.zcode;
     let sign = this.data.sign;
 
-    self.setData({
-      
-    })
     app.post(API_URL, "action=changeRoomRecords&Loginrandom=" + LoginRandom + "&zcode=" + zcode + "&flag=1" + "&roomid=" + sign, false, true, "").then((res) => {
 
     })

@@ -69,6 +69,8 @@ Page({
 
     let shitiNum = px;
 
+    console.log("action=SelectTestShow&sjid=" + id + "&Loginrandom=" + Loginrandom + "&zcode=" + zcode)
+
     app.post(API_URL, "action=SelectTestShow&sjid=" + id + "&Loginrandom=" + Loginrandom + "&zcode=" + zcode, false, true, "","",true,self).then((res) => {
       
       let shitiArray = res.data.list;

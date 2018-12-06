@@ -1,7 +1,7 @@
 {
   "pages": [
-    "pages/index/index",
     "pages/tiku/tiku",
+    "pages/index/index",
     "pages/mine/mineIndex/mineIndex",
     "pages/login1/login1",
     "pages/live/live",
