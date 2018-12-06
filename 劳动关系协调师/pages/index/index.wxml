@@ -26,7 +26,7 @@
         </view>
       </view>
     </view>
-    <view class = "hasNoVideo" style="height:{{windowHeight-522}}rpx" wx:if = "{{pastVideos.length ==0}}">
+    <view class = "hasNoVideo" style="height:{{windowHeight-540}}rpx" wx:if = "{{pastVideos.length ==0}}">
       暂时没有往期直播视频
     </view>
   </scroll-view>
