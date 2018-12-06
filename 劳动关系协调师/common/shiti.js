@@ -1121,11 +1121,12 @@ function lianxiRestart(self) {
     }
 
     //得到swiper数组
+    let nextShiti = undefined; //后一题
     let midShiti = shitiArray[0]; //中间题
     initShiti(midShiti, self); //初始化试题对象
 
     if (shitiArray.length > 1) {
-      let nextShiti = shitiArray[1]; //后一题
+      nextShiti = shitiArray[1]; //后一题
       initShiti(nextShiti, self); //初始化试题对象
     }
 
