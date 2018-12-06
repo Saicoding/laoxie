@@ -1376,6 +1376,8 @@ function setMarkedAll(shitiArray) {
   }
 }
 
+
+
 /**
  * 根据问题长度，得到高度
  */

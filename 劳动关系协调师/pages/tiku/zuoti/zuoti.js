@@ -140,9 +140,9 @@ Page({
   },
 
   /**
- * 切换问题的动画
- */
-  _toogleAnimation: function () {
+   * 切换问题的动画
+   */
+  _toogleAnimation: function() {
     let self = this;
 
     let px = self.data.px; //当前px
@@ -229,7 +229,7 @@ Page({
             isLoading: true //设置正在载入中
           })
 
-          app.post(API_URL, "action=SelectShiti&LoginRandom=" + LoginRandom + "&z_id=" + z_id + "&zcode=" + zcode + "&tid=" + tid + "&page=" + nextPage, false, false, "载入中", true, self).then((res) => {
+          app.post(API_URL, "action=SelectShiti&LoginRandom=" + LoginRandom + "&z_id=" + z_id + "&zcode=" + zcode + "&tid=" + tid + "&page=" + nextPage, false, true, "", true, self).then((res) => {
 
             let newWrongShitiArray = res.data.shiti;
 
@@ -258,7 +258,7 @@ Page({
             pageArray: pageArray,
           })
 
-          app.post(API_URL, "action=SelectShiti&LoginRandom=" + LoginRandom + "&z_id=" + z_id + "&tid=" + tid + "&zcode=" + zcode + "&page=" + prePage, true, false, "载入中", true, self).then((res) => {
+          app.post(API_URL, "action=SelectShiti&LoginRandom=" + LoginRandom + "&z_id=" + z_id + "&tid=" + tid + "&zcode=" + zcode + "&page=" + prePage, false, true, "", true, self).then((res) => {
 
             let newWrongShitiArray = res.data.shiti;
 
@@ -278,100 +278,122 @@ Page({
 
     let preShiti = undefined; //前一题
     let nextShiti = undefined; //后一题
-    let midShiti = shitiArray[px - 1]; //中间题
-    myFavorite = midShiti.favorite;
 
-    //每次滑动结束后初始化前一题和后一题
-    if (direction == "左滑") {
-      if (px < shitiArray.length) { //如果还有下一题
-        nextShiti = shitiArray[px];
-        common.initShiti(nextShiti, self); //初始化试题对象
-
-        //先处理是否是已经回答的题    
-        common.processDoneAnswer(nextShiti.done_daan, nextShiti, self);
-      }
-      preShiti = shitiArray[px - 2]; //肯定会有上一题
-    } else { //右滑
-      if (px > 1) { //如果还有上一题
-        preShiti = shitiArray[px - 2];
-        common.initShiti(preShiti, self); //初始化试题对象
-        common.processDoneAnswer(preShiti.done_daan, preShiti, self);
-      }
-      nextShiti = shitiArray[px];
-    }
-
-    common.storeLastShiti(px, self); //存储最后一题的状态
-
-    //滑动结束后,更新滑动试题数组
-    let sliderShitiArray = [];
-
-    if (px != 1 && px != shitiArray.length) {
-      if (current == 1) {
-        if (nextShiti != undefined) sliderShitiArray[2] = nextShiti;
-        sliderShitiArray[1] = midShiti;
-        if (preShiti != undefined) sliderShitiArray[0] = preShiti;
-      } else if (current == 2) {
-        if (nextShiti != undefined) sliderShitiArray[0] = nextShiti;
-        sliderShitiArray[2] = midShiti;
-        if (preShiti != undefined) sliderShitiArray[1] = preShiti;
-
+    let p = new Promise(function(resolve, reject) {
+      if (shitiArray[px - 1].id != undefined) {
+        resolve(shitiArray[px - 1]);
       } else {
-        if (nextShiti != undefined) sliderShitiArray[1] = nextShiti;
-        sliderShitiArray[0] = midShiti;
-        if (preShiti != undefined) sliderShitiArray[2] = preShiti;
+        reject('错误');
       }
-    } else if (px == 1) {
-      sliderShitiArray[0] = midShiti;
-      sliderShitiArray[1] = nextShiti;
-      current = 0;
-      self.setData({
-        myCurrent: 0
+    }).then((res) => {
+      let midShiti = res;
+      myFavorite = midShiti.favorite;
+
+      //每次滑动结束后初始化前一题和后一题
+      if (direction == "左滑") {
+        if (px < shitiArray.length) { //如果还有下一题
+          if (shitiArray[px].id == undefined) { //如果没有下一题，说明还没请求完毕，设置定时器
+            let interval = setInterval((res) => {
+              if (shitiArray[px].id != undefined) {
+                nextShiti = shitiArray[px];
+
+                common.initShiti(nextShiti, self); //初始化试题对象
+                //先处理是否是已经回答的题    
+                common.processDoneAnswer(nextShiti.done_daan, nextShiti, self);
+                clearInterval(interval);
+              }
+            }, 100)
+          } else {
+            nextShiti = shitiArray[px];
+            common.initShiti(nextShiti, self); //初始化试题对象
+            //先处理是否是已经回答的题    
+            common.processDoneAnswer(nextShiti.done_daan, nextShiti, self);
+          }
+        }
+        preShiti = shitiArray[px - 2]; //肯定会有上一题
+      } else { //右滑
+        if (px > 1) { //如果还有上一题
+          preShiti = shitiArray[px - 2];
+          common.initShiti(preShiti, self); //初始化试题对象
+          common.processDoneAnswer(preShiti.done_daan, preShiti, self);
+        }
+        nextShiti = shitiArray[px];
+      }
+
+      common.storeLastShiti(px, self); //存储最后一题的状态
+
+      //滑动结束后,更新滑动试题数组
+      let sliderShitiArray = [];
+
+      if (px != 1 && px != shitiArray.length) {
+        if (current == 1) {
+          if (nextShiti != undefined) sliderShitiArray[2] = nextShiti;
+          sliderShitiArray[1] = midShiti;
+          if (preShiti != undefined) sliderShitiArray[0] = preShiti;
+        } else if (current == 2) {
+          if (nextShiti != undefined) sliderShitiArray[0] = nextShiti;
+          sliderShitiArray[2] = midShiti;
+          if (preShiti != undefined) sliderShitiArray[1] = preShiti;
+
+        } else {
+          if (nextShiti != undefined) sliderShitiArray[1] = nextShiti;
+          sliderShitiArray[0] = midShiti;
+          if (preShiti != undefined) sliderShitiArray[2] = preShiti;
+        }
+      } else if (px == 1) {
+        sliderShitiArray[0] = midShiti;
+        sliderShitiArray[1] = nextShiti;
+        current = 0;
+        self.setData({
+          myCurrent: 0
+        })
+      } else if (px == shitiArray.length) {
+        sliderShitiArray[0] = preShiti;
+        sliderShitiArray[1] = midShiti;
+        current = 1;
+        self.setData({
+          myCurrent: 1
+        })
+      }
+
+
+      circular = px == 1 || px == shitiArray.length ? false : true //如果滑动后编号是1,或者最后一个就禁止循环滑动
+
+      self.setData({ //每滑动一下,更新试题
+        shitiArray: shitiArray,
+        sliderShitiArray: sliderShitiArray,
+        circular: circular,
+        lastSliderIndex: current,
+        xiaotiCurrent: 0, //没滑动一道题都将材料题小题的滑动框index置为0
+        myFavorite: myFavorite,
+        px: px,
+        checked: false
       })
-    } else if (px == shitiArray.length) {
-      sliderShitiArray[0] = preShiti;
-      sliderShitiArray[1] = midShiti;
-      current = 1;
-      self.setData({
-        myCurrent: 1
-      })
-    }
 
+      //如果是材料题就判断是否动画
+      if (midShiti.TX == 99) {
+        let str = "#q" + px;
 
-    circular = px == 1 || px == shitiArray.length ? false : true //如果滑动后编号是1,或者最后一个就禁止循环滑动
+        let questionStr = midShiti.question; //问题的str
+        let height = common.getQuestionHeight(questionStr); //根据问题长度，计算应该多高显示
 
-    self.setData({ //每滑动一下,更新试题
-      shitiArray: shitiArray,
-      sliderShitiArray: sliderShitiArray,
-      circular: circular,
-      lastSliderIndex: current,
-      xiaotiCurrent: 0, //没滑动一道题都将材料题小题的滑动框index置为0
-      myFavorite: myFavorite,
-      px: px,
-      checked: false
+        height = height >= 400 ? 400 : height;
+
+        let question = self.selectComponent(str);
+
+        animate.blockSpreadAnimation(90, height, question);
+
+        question.setData({ //每切换到材料题就把占位框复位
+          style2: "positon: fixed; left: 20rpx;height:" + height + "rpx", //问题框"   
+        })
+
+        self.setData({
+          height: height
+        })
+      }
+    }).catch((res)=>{
+
     })
-
-    //如果是材料题就判断是否动画
-    if (midShiti.TX == 99) {
-      let str = "#q" + px;
-
-      let questionStr = midShiti.question;//问题的str
-      let height = common.getQuestionHeight(questionStr);//根据问题长度，计算应该多高显示
-
-      height = height >= 400 ? 400 : height;
-
-      let question = self.selectComponent(str);
-
-      animate.blockSpreadAnimation(90, height, question);
-
-      question.setData({//每切换到材料题就把占位框复位
-        style2: "positon: fixed; left: 20rpx;height:" + height + "rpx", //问题框"   
-      })
-
-      self.setData({
-        height: height
-      })
-    }
-
   },
 
   /**
@@ -403,33 +425,33 @@ Page({
   },
 
   /**
-  * 材料题作答
-  */
-  CLwendaSelect: function (e) {
+   * 材料题作答
+   */
+  CLwendaSelect: function(e) {
     let self = this;
     let px = e.currentTarget.dataset.px;
 
-    let shitiPX = self.data.px;//试题的px
+    let shitiPX = self.data.px; //试题的px
     let shitiArray = self.data.shitiArray
     let shiti = shitiArray[shitiPX - 1]; //本试题对象
 
     let xiaoti = shiti.xiaoti;
 
     let sliderShitiArray = self.data.sliderShitiArray;
-    let current = self.data.lastSliderIndex//当前滑动编号
+    let current = self.data.lastSliderIndex //当前滑动编号
     let currentShiti = sliderShitiArray[current];
 
-    xiaoti[px-1].isAnswer = true;
+    xiaoti[px - 1].isAnswer = true;
 
     let allDone = true;
 
     for (let i = 0; i < xiaoti.length; i++) {
-      if (xiaoti[i].isAnswer == undefined || xiaoti[i].isAnswer == false){
+      if (xiaoti[i].isAnswer == undefined || xiaoti[i].isAnswer == false) {
         allDone = false;
       }
     }
 
-    if(allDone){
+    if (allDone) {
       common.storeWendaStatus(shiti, self);
       common.setWendaMarkAnswer(shiti, self) //更新答题板状态
       common.ifDoneAll(shitiArray, self.data.doneAnswerArray); //判断是不是所有题已经做完
@@ -491,9 +513,9 @@ Page({
   },
 
   /**
- * 材料题点击开始作答按钮
- */
-  CLZuoti: function (e) {
+   * 材料题点击开始作答按钮
+   */
+  CLZuoti: function(e) {
     let self = this;
 
     let str = "#q" + self.data.px;
