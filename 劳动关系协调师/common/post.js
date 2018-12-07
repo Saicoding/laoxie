@@ -5,6 +5,7 @@ let animate = require('animate.js')
  * 练习题
  */
 function zuotiOnload(options, px, circular, myFavorite, shitiArray, user, page, all_nums, pageall,self){
+  console.log(shitiArray)
   let username = user.username;
   let LoginRandom = user.Login_random;
   let zcode = user.zcode;
@@ -40,8 +41,6 @@ function zuotiOnload(options, px, circular, myFavorite, shitiArray, user, page, 
     success: function (res1) {
       //根据章是否有子节所有已经回答的题
       let doneAnswerArray = res1.data[self.data.zhangIdx][self.data.jieIdx];
-
-      console.log(doneAnswerArray)
 
       if (options.tid =="5"){
         common.setWendaMarkAnswerItems(doneAnswerArray, self)
@@ -227,7 +226,8 @@ function wrongOnload(options, px, circular, myFavorite, res, user,  requesttime,
 
   common.initMarkAnswer(all_nums, self); //初始化答题板数组
 
-  common.initShitiArray(shitiArray, all_nums);
+  shitiArray = common.initShitiArray(shitiArray, all_nums,1);
+ 
 
   //得到swiper数组
   let nextShiti = undefined;//后一题

@@ -313,6 +313,7 @@ function initShitiArray(shitiArray, all_nums, page) {
     allShitiArray.push(shiti);
   }
 
+
   //后面的空试题
   for (let i = page * 10; i < all_nums; i++) {
     allShitiArray.push({});
