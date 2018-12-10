@@ -94,9 +94,8 @@ Page({
             text: nums.toString(),
           })
         }else{
-          wx.setTabBarBadge({
+          wx.removeTabBarBadge({
             index: 2,
-            text: "",
           })
         }
 

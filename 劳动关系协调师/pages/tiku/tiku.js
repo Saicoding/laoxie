@@ -481,9 +481,8 @@ Page({
               text: nums,
             })
           } else {
-            wx.setTabBarBadge({
-              index: 3,
-              text: "",
+            wx.removeTabBarBadge({
+              index: 3
             })
           }
         })

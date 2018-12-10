@@ -228,6 +228,7 @@ Page({
             pageArray: pageArray,
           })
 
+          console.log("action=SelectShiti&LoginRandom=" + LoginRandom + "&z_id=" + z_id + "&zcode=" + zcode + "&tid=" + tid + "&page=" + nextPage)
           app.post(API_URL, "action=SelectShiti&LoginRandom=" + LoginRandom + "&z_id=" + z_id + "&zcode=" + zcode + "&tid=" + tid + "&page=" + nextPage, false, true, "", true, self).then((res) => {
 
             let newWrongShitiArray = res.data.shiti;
