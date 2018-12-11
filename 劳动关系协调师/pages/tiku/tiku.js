@@ -8,6 +8,7 @@ let API_URL = "https://xcx2.chinaplat.com/laoxie/";
 const app = getApp(); //获取app对象
 let validate = require('../../common/validate.js');
 let buttonClicked = false;
+let num = 0;
 
 Page({
 
@@ -27,7 +28,259 @@ Page({
    * 生命周期函数--监听页面加载
    */
   onLoad: function(options) {
+    let self = this;
 
+    let isReLoad = self.data.isReLoad;
+    let first = self.data.first;
+
+    let user = wx.getStorageSync('user');
+
+    if (user) { //如果已经登录
+
+      let Loginrandom = user.Login_random == undefined ? "" : user.Login_random;
+      let zcode = user.zcode == undefined ? "" : user.zcode;
+
+      this.setWindowWidthHeightScrollHeight(); //获取窗口高度 宽度 并计算章节滚动条的高度
+
+      app.post(API_URL, "action=SelectZj&Loginrandom=" + Loginrandom + "&zcode=" + zcode, true, false, "请稍后", "", false, self).then((res) => { //得到上一步设置的题库下的所有章节
+        this.setZhangjie(res.data.list); //得到当前题库的缓存,并设置变量:1.所有题库数组 2.要显示的题库id 3.要显示的题库index
+        let zhangjie = res.data.zhangjielist //得到所有章节
+
+        let answer_nums_array = [] //答题数目array
+        this.initZhangjie(zhangjie, answer_nums_array) //初始化章节信息,构造对应章节已答数目的对象，包括：1.展开初始高度 2.展开初始动画是true 3.答题数等
+
+        // wx.clearStorage(self.data.zhangjie_id)
+        // 得到存储答题状态
+        wx.getStorage({
+          key: 'user',
+          success: function (res) {
+            let user = res.data;
+            wx.getStorage({
+              key: "shiti" + self.data.zhangjie_id + user.username,
+              success: function (res) {
+                //将每个节的已经作答的本地存储映射到组件中    
+                for (let i = 0; i < zhangjie.length; i++) {
+                  let zhang_answer_num = 0; //章的总作答数
+
+                  for (let j = 0; j < zhangjie[i].data.length; j++) {
+                    zhangjie[i].data[j].answer_nums = res.data[i][j].length;
+                    zhang_answer_num += res.data[i][j].length;
+                    if (zhangjie[i].data[j].answer_nums == zhangjie[i].data[j].nums) {
+                      zhangjie[i].data[j].isAnswerAll = true;
+                    } else {
+                      zhangjie[i].isAnswerAll = false;
+                    }
+                  }
+                  zhangjie[i].zhang_answer_num = zhang_answer_num;
+                  if (zhangjie[i].zhang_answer_num == zhangjie[i].nums) { //设置章节是否已经回答完毕
+                    zhangjie[i].isAnswerAll = true;
+                  } else {
+                    zhangjie[i].isAnswerAll = false;
+                  }
+                }
+
+                //因为是在同步内部，最后需要更新章节信息，不更新数据不会改变
+                self.setData({
+                  zhangjie: zhangjie
+                })
+
+                //得到消息数目
+                let url = encodeURIComponent('/pages/tiku/tiku');
+
+                app.post(API_URL, "action=GetNoticesNums&LoginRandom=" + Loginrandom + "&zcode=" + zcode, false, true, "", url).then((res) => {
+                  let nums = res.data.nums;
+
+                  if (nums > 0) {
+                    nums = nums.toString();
+                    wx.setTabBarBadge({
+                      index: 3,
+                      text: nums,
+                    })
+                  } else {
+                    wx.removeTabBarBadge({
+                      index: 3
+                    })
+                  }
+                })
+              },
+              fail: function () { //如果没有本地存储就初始化
+                wx.setStorage({
+                  key: "shiti" + self.data.zhangjie_id + user.username,
+                  data: answer_nums_array
+                })
+
+                //得到消息数目
+                let url = encodeURIComponent('/pages/tiku/tiku');
+
+                app.post(API_URL, "action=GetNoticesNums&LoginRandom=" + Loginrandom + "&zcode=" + zcode, false, true, "", url).then((res) => {
+                  let nums = res.data.nums;
+
+                  if (nums > 0) {
+                    nums = nums.toString();
+                    wx.setTabBarBadge({
+                      index: 3,
+                      text: nums,
+                    })
+                  } else {
+                    wx.removeTabBarBadge({
+                      index: 3
+                    })
+                  }
+                })
+              }
+            })
+          },
+
+          fail: function () {
+            //将每个节的已经作答的本地存储映射到组件中          
+            for (let i = 0; i < zhangjie.length; i++) {
+              let zhang_answer_num = 0; //章的总作答数
+
+              for (let j = 0; j < zhangjie[i].data.length; j++) {
+                zhangjie[i].data[j].answer_nums = 0; //节已经回答数
+                zhangjie[i].data[j].isAnswerAll = false;
+              }
+
+              zhangjie[i].zhang_answer_num = zhang_answer_num;
+              zhangjie[i].isAnswerAll = false;
+            }
+            //因为是在同步内部，最后需要更新章节信息，不更新数据不会改变
+            self.setData({
+              zhangjie: zhangjie
+            })
+          }
+        })
+
+
+        self.setData({
+          zhangjie: zhangjie,
+          // z_id:res.data.list[0].z_id,
+          loaded: true, //已经载入完毕
+          isLoaded: true,
+          isReLoad: false,
+        })
+      })
+
+      let zhangjie = self.data.zhangjie;
+
+      if (!self.data.loaded) return //如果没有完成首次载入就什么都不作
+
+      // 得到存储答题状态
+      wx.getStorage({
+        key: 'user',
+        success: function (res) {
+          let user = res.data;
+
+          //得到消息数目
+          let LoginRandom = user.Login_random;
+          let zcode = user.zcode;
+
+          let url = encodeURIComponent('/pages/index/index');
+          app.post(API_URL, "action=GetNoticesNums&LoginRandom=" + LoginRandom + "&zcode=" + zcode, false, true, "", url).then((res) => {
+            let nums = res.data.nums;
+
+            if (nums > 0) {
+              nums = nums.toString();
+              wx.setTabBarBadge({
+                index: 3,
+                text: nums,
+              })
+            } else {
+              wx.removeTabBarBadge({
+                index: 3
+              })
+            }
+          })
+
+          wx.getStorage({
+            key: "shiti" + self.data.zhangjie_id + user.username,
+            success: function (res) {
+
+              //将每个节的已经作答的本地存储映射到组件中          
+              for (let i = 0; i < zhangjie.length; i++) {
+                let zhang_answer_num = 0; //章的总作答数
+
+                for (let j = 0; j < zhangjie[i].data.length; j++) {
+                  zhangjie[i].data[j].answer_nums = res.data[i][j].length;
+                  zhang_answer_num += res.data[i][j].length;
+                  if (zhangjie[i].data[j].answer_nums == zhangjie[i].data[j].nums) {
+                    zhangjie[i].data[j].isAnswerAll = true;
+                  } else {
+                    zhangjie[i].data[j].isAnswerAll = false;
+                  }
+                }
+
+                zhangjie[i].zhang_answer_num = zhang_answer_num;
+                if (zhangjie[i].zhang_answer_num == zhangjie[i].nums) { //设置章节是否已经回答完毕
+                  zhangjie[i].isAnswerAll = true;
+                } else {
+                  zhangjie[i].isAnswerAll = false;
+                }
+              }
+              //因为是在同步内部，最后需要更新章节信息，不更新数据不会改变
+              self.setData({
+                zhangjie: zhangjie
+              })
+            },
+
+            fail: function () {
+              //将每个节的已经作答的本地存储映射到组件中          
+              for (let i = 0; i < zhangjie.length; i++) {
+                let zhang_answer_num = 0; //章的总作答数
+
+                for (let j = 0; j < zhangjie[i].data.length; j++) {
+                  zhangjie[i].data[j].answer_nums = 0; //节已经回答数
+                  zhangjie[i].data[j].isAnswerAll = false;
+                }
+
+                zhangjie[i].zhang_answer_num = zhang_answer_num;
+                zhangjie[i].isAnswerAll = false;
+              }
+
+              let answer_nums_array = [] //答题数目array
+              for (let i = 0; i < zhangjie.length; i++) {
+                zhangjie[i].zhang_answer_num = 0; //初始化答题数
+                let data = zhangjie[i].data; //字节
+                answer_nums_array[i] = []; //初始化本地存储
+
+                for (let j = 0; j < data.length; j++) {
+                  answer_nums_array[i][j] = []; //初始化本地存储
+                  zhangjie[i].data[j].answer_nums = 0; //初始化节的已作答数目
+                }
+              }
+
+              wx.setStorage({
+                key: "shiti" + self.data.zhangjie_id + user.username,
+                data: answer_nums_array
+              })
+              //因为是在同步内部，最后需要更新章节信息，不更新数据不会改变
+              self.setData({
+                zhangjie: zhangjie
+              })
+            }
+          })
+        },
+
+        fail: function (res) {
+          //将每个节的已经作答的本地存储映射到组件中          
+          for (let i = 0; i < zhangjie.length; i++) {
+            let zhang_answer_num = 0; //章的总作答数
+
+            for (let j = 0; j < zhangjie[i].data.length; j++) {
+              zhangjie[i].data[j].answer_nums = 0; //节已经回答数
+              zhangjie[i].data[j].isAnswerAll = false;
+            }
+
+            zhangjie[i].zhang_answer_num = zhang_answer_num;
+            zhangjie[i].isAnswerAll = false;
+          }
+          //因为是在同步内部，最后需要更新章节信息，不更新数据不会改变
+          self.setData({
+            zhangjie: zhangjie
+          })
+        }
+      })
+    }
   },
   /* 更改题库 */
   bindPickerChange: function(e) {
@@ -335,16 +588,17 @@ Page({
   onShow: function() {
     let self = this;
 
+    let isReLoad = self.data.isReLoad;
     let user = wx.getStorageSync('user');
+    buttonClicked = false;
 
-    if (user) { //如果已经登录
+    if (isReLoad) { //如果已经登录
       let Loginrandom = user.Login_random == undefined ? "" : user.Login_random;
       let zcode = user.zcode == undefined ? "" : user.zcode;
 
-
       this.setWindowWidthHeightScrollHeight(); //获取窗口高度 宽度 并计算章节滚动条的高度
 
-      app.post(API_URL, "action=SelectZj&Loginrandom=" + Loginrandom + "&zcode=" + zcode, true, false, "请稍后").then((res) => { //得到上一步设置的题库下的所有章节
+      app.post(API_URL, "action=SelectZj&Loginrandom=" + Loginrandom + "&zcode=" + zcode, true, false, "请稍后", "", false, self).then((res) => { //得到上一步设置的题库下的所有章节
         this.setZhangjie(res.data.list); //得到当前题库的缓存,并设置变量:1.所有题库数组 2.要显示的题库id 3.要显示的题库index
         let zhangjie = res.data.zhangjielist //得到所有章节
 
@@ -385,11 +639,49 @@ Page({
                 self.setData({
                   zhangjie: zhangjie
                 })
+
+                //得到消息数目
+                let url = encodeURIComponent('/pages/tiku/tiku');
+
+                app.post(API_URL, "action=GetNoticesNums&LoginRandom=" + Loginrandom + "&zcode=" + zcode, false, true, "", url).then((res) => {
+                  let nums = res.data.nums;
+
+                  if (nums > 0) {
+                    nums = nums.toString();
+                    wx.setTabBarBadge({
+                      index: 3,
+                      text: nums,
+                    })
+                  } else {
+                    wx.removeTabBarBadge({
+                      index: 3
+                    })
+                  }
+                })
               },
               fail: function() { //如果没有本地存储就初始化
                 wx.setStorage({
                   key: "shiti" + self.data.zhangjie_id + user.username,
                   data: answer_nums_array
+                })
+
+                //得到消息数目
+                let url = encodeURIComponent('/pages/tiku/tiku');
+
+                app.post(API_URL, "action=GetNoticesNums&LoginRandom=" + Loginrandom + "&zcode=" + zcode, false, true, "", url).then((res) => {
+                  let nums = res.data.nums;
+
+                  if (nums > 0) {
+                    nums = nums.toString();
+                    wx.setTabBarBadge({
+                      index: 3,
+                      text: nums,
+                    })
+                  } else {
+                    wx.removeTabBarBadge({
+                      index: 3
+                    })
+                  }
                 })
               }
             })
@@ -413,7 +705,6 @@ Page({
               zhangjie: zhangjie
             })
           }
-
         })
 
 
@@ -422,159 +713,139 @@ Page({
           // z_id:res.data.list[0].z_id,
           loaded: true, //已经载入完毕
           isLoaded: true,
+          isReLoad:false,
         })
       })
 
-      //得到消息数目
-      let url = encodeURIComponent('/pages/tiku/tiku');
-      self.setData({
-        isLoaded: false
-      })
-      app.post(API_URL, "action=GetNoticesNums&LoginRandom=" + Loginrandom + "&zcode=" + zcode, false, true, "", url).then((res) => {
-        let nums = res.data.nums;
+      let zhangjie = self.data.zhangjie;
 
-        if (nums > 0) {
-          nums = nums.toString();
-          wx.setTabBarBadge({
-            index: 3,
-            text: nums,
+      // 得到存储答题状态
+      wx.getStorage({
+        key: 'user',
+        success: function (res) {
+          let user = res.data;
+
+          //得到消息数目
+          let LoginRandom = user.Login_random;
+          let zcode = user.zcode;
+
+          let url = encodeURIComponent('/pages/index/index');
+          app.post(API_URL, "action=GetNoticesNums&LoginRandom=" + LoginRandom + "&zcode=" + zcode, false, true, "", url).then((res) => {
+            let nums = res.data.nums;
+
+            if (nums > 0) {
+              nums = nums.toString();
+              wx.setTabBarBadge({
+                index: 3,
+                text: nums,
+              })
+            } else {
+              wx.removeTabBarBadge({
+                index: 3
+              })
+            }
           })
-        } else {
-          wx.setTabBarBadge({
-            index: 3,
-            text: "",
+
+          wx.getStorage({
+            key: "shiti" + self.data.zhangjie_id + user.username,
+            success: function (res) {
+
+              //将每个节的已经作答的本地存储映射到组件中          
+              for (let i = 0; i < zhangjie.length; i++) {
+                let zhang_answer_num = 0; //章的总作答数
+
+                for (let j = 0; j < zhangjie[i].data.length; j++) {
+                  zhangjie[i].data[j].answer_nums = res.data[i][j].length;
+                  zhang_answer_num += res.data[i][j].length;
+                  if (zhangjie[i].data[j].answer_nums == zhangjie[i].data[j].nums) {
+                    zhangjie[i].data[j].isAnswerAll = true;
+                  } else {
+                    zhangjie[i].data[j].isAnswerAll = false;
+                  }
+                }
+
+                zhangjie[i].zhang_answer_num = zhang_answer_num;
+                if (zhangjie[i].zhang_answer_num == zhangjie[i].nums) { //设置章节是否已经回答完毕
+                  zhangjie[i].isAnswerAll = true;
+                } else {
+                  zhangjie[i].isAnswerAll = false;
+                }
+              }
+              //因为是在同步内部，最后需要更新章节信息，不更新数据不会改变
+              self.setData({
+                zhangjie: zhangjie
+              })
+            },
+
+            fail: function () {
+              //将每个节的已经作答的本地存储映射到组件中          
+              for (let i = 0; i < zhangjie.length; i++) {
+                let zhang_answer_num = 0; //章的总作答数
+
+                for (let j = 0; j < zhangjie[i].data.length; j++) {
+                  zhangjie[i].data[j].answer_nums = 0; //节已经回答数
+                  zhangjie[i].data[j].isAnswerAll = false;
+                }
+
+                zhangjie[i].zhang_answer_num = zhang_answer_num;
+                zhangjie[i].isAnswerAll = false;
+              }
+
+              let answer_nums_array = [] //答题数目array
+              for (let i = 0; i < zhangjie.length; i++) {
+                zhangjie[i].zhang_answer_num = 0; //初始化答题数
+                let data = zhangjie[i].data; //字节
+                answer_nums_array[i] = []; //初始化本地存储
+
+                for (let j = 0; j < data.length; j++) {
+                  answer_nums_array[i][j] = []; //初始化本地存储
+                  zhangjie[i].data[j].answer_nums = 0; //初始化节的已作答数目
+                }
+              }
+
+              wx.setStorage({
+                key: "shiti" + self.data.zhangjie_id + user.username,
+                data: answer_nums_array
+              })
+              //因为是在同步内部，最后需要更新章节信息，不更新数据不会改变
+              self.setData({
+                zhangjie: zhangjie
+              })
+            }
+          })
+        },
+
+        fail: function (res) {
+          //将每个节的已经作答的本地存储映射到组件中          
+          for (let i = 0; i < zhangjie.length; i++) {
+            let zhang_answer_num = 0; //章的总作答数
+
+            for (let j = 0; j < zhangjie[i].data.length; j++) {
+              zhangjie[i].data[j].answer_nums = 0; //节已经回答数
+              zhangjie[i].data[j].isAnswerAll = false;
+            }
+
+            zhangjie[i].zhang_answer_num = zhang_answer_num;
+            zhangjie[i].isAnswerAll = false;
+          }
+          //因为是在同步内部，最后需要更新章节信息，不更新数据不会改变
+          self.setData({
+            zhangjie: zhangjie
           })
         }
       })
-    }else{
+    }
+    
+    if(!user){//如果没有用户名就登陆
       let url = encodeURIComponent('/pages/tiku/tiku');
+
+      let pages = getCurrentPages();
+      console.log(pages);
 
       wx.navigateTo({
         url: '/pages/login1/login1?url=' + url + '&ifGoPage=false',
       })
-      return;
     }
-
-    buttonClicked = false;
-    let zhangjie = self.data.zhangjie;
-
-    if (!self.data.loaded) return //如果没有完成首次载入就什么都不作
-
-    // 得到存储答题状态
-    wx.getStorage({
-      key: 'user',
-      success: function(res) {
-        let user = res.data;
-
-        //得到消息数目
-        let LoginRandom = user.Login_random;
-        let zcode = user.zcode;
-
-        let url = encodeURIComponent('/pages/index/index');
-        app.post(API_URL, "action=GetNoticesNums&LoginRandom=" + LoginRandom + "&zcode=" + zcode, false, true, "", url).then((res) => {
-          let nums = res.data.nums;
-
-          if (nums > 0) {
-            nums = nums.toString();
-            wx.setTabBarBadge({
-              index: 3,
-              text: nums,
-            })
-          } else {
-            wx.removeTabBarBadge({
-              index: 3
-            })
-          }
-        })
-
-        wx.getStorage({
-          key: "shiti" + self.data.zhangjie_id + user.username,
-          success: function(res) {
-
-            //将每个节的已经作答的本地存储映射到组件中          
-            for (let i = 0; i < zhangjie.length; i++) {
-              let zhang_answer_num = 0; //章的总作答数
-
-              for (let j = 0; j < zhangjie[i].data.length; j++) {
-                zhangjie[i].data[j].answer_nums = res.data[i][j].length;
-                zhang_answer_num += res.data[i][j].length;
-                if (zhangjie[i].data[j].answer_nums == zhangjie[i].data[j].nums) {
-                  zhangjie[i].data[j].isAnswerAll = true;
-                } else {
-                  zhangjie[i].data[j].isAnswerAll = false;
-                }
-              }
-
-              zhangjie[i].zhang_answer_num = zhang_answer_num;
-              if (zhangjie[i].zhang_answer_num == zhangjie[i].nums) { //设置章节是否已经回答完毕
-                zhangjie[i].isAnswerAll = true;
-              } else {
-                zhangjie[i].isAnswerAll = false;
-              }
-            }
-            //因为是在同步内部，最后需要更新章节信息，不更新数据不会改变
-            self.setData({
-              zhangjie: zhangjie
-            })
-          },
-
-          fail: function() {
-            //将每个节的已经作答的本地存储映射到组件中          
-            for (let i = 0; i < zhangjie.length; i++) {
-              let zhang_answer_num = 0; //章的总作答数
-
-              for (let j = 0; j < zhangjie[i].data.length; j++) {
-                zhangjie[i].data[j].answer_nums = 0; //节已经回答数
-                zhangjie[i].data[j].isAnswerAll = false;
-              }
-
-              zhangjie[i].zhang_answer_num = zhang_answer_num;
-              zhangjie[i].isAnswerAll = false;
-            }
-
-            let answer_nums_array = [] //答题数目array
-            for (let i = 0; i < zhangjie.length; i++) {
-              zhangjie[i].zhang_answer_num = 0; //初始化答题数
-              let data = zhangjie[i].data; //字节
-              answer_nums_array[i] = []; //初始化本地存储
-
-              for (let j = 0; j < data.length; j++) {
-                answer_nums_array[i][j] = []; //初始化本地存储
-                zhangjie[i].data[j].answer_nums = 0; //初始化节的已作答数目
-              }
-            }
-
-            wx.setStorage({
-              key: "shiti" + self.data.zhangjie_id + user.username,
-              data: answer_nums_array
-            })
-            //因为是在同步内部，最后需要更新章节信息，不更新数据不会改变
-            self.setData({
-              zhangjie: zhangjie
-            })
-          }
-        })
-      },
-
-      fail: function(res) {
-        //将每个节的已经作答的本地存储映射到组件中          
-        for (let i = 0; i < zhangjie.length; i++) {
-          let zhang_answer_num = 0; //章的总作答数
-
-          for (let j = 0; j < zhangjie[i].data.length; j++) {
-            zhangjie[i].data[j].answer_nums = 0; //节已经回答数
-            zhangjie[i].data[j].isAnswerAll = false;
-          }
-
-          zhangjie[i].zhang_answer_num = zhang_answer_num;
-          zhangjie[i].isAnswerAll = false;
-        }
-        //因为是在同步内部，最后需要更新章节信息，不更新数据不会改变
-        self.setData({
-          zhangjie: zhangjie
-        })
-      }
-    })
   },
 
   /**

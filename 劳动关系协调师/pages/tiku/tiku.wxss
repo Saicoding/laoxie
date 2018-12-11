@@ -176,7 +176,7 @@
   height: 90rpx;
   padding-left: 30rpx;
   font-size: 35rpx;
-  border-bottom: 1px solid#eee;
+  border-bottom: 1rpx solid#eee;
   border-top: 15rpx #f3f7f8 solid;
 }
 
@@ -240,7 +240,9 @@
   line-height: 68rpx;
   font-size: 30rpx;
   color: rgb(73, 73, 73);
-  border: 1rpx solid white;
+  /* border:1rpx solid white; */
+  border-top: 1rpx solid white;
+  border-bottom:1rpx solid white;
 }
 
 .jie_title {
