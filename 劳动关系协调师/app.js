@@ -98,9 +98,8 @@ App({
   },
 
   onLaunch: function() {
-    wx.clearStorage();
+    // wx.clearStorage();
     // wx.clearStorage("user")
-
   },
   globalData: {
   }

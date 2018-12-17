@@ -28,7 +28,7 @@ Page({
    * 生命周期函数--监听页面加载
    */
   onLoad: function(options) {
-  
+    wx.removeStorageSync('first');
   },
   /* 更改题库 */
   bindPickerChange: function(e) {
@@ -342,7 +342,6 @@ Page({
 
     buttonClicked = false;
 
-    console.log(first)
     if ((isReLoad || first=="")&& user !="") { //如果已经登录
       let Loginrandom = user.Login_random == undefined ? "" : user.Login_random;
       let zcode = user.zcode == undefined ? "" : user.zcode;
@@ -598,8 +597,6 @@ Page({
       })
       return
     }
-
-    console.log('haha')
 
     let zhangjie = self.data.zhangjie;
 

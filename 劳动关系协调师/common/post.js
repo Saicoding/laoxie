@@ -247,8 +247,6 @@ function wrongOnload(options, px, circular, myFavorite, res, user,  requesttime,
   if (nextShiti != undefined) sliderShitiArray[1] = nextShiti;
   sliderShitiArray[0] = midShiti;
 
-  console.log(self.data.isLoaded)
-
   self.setData({
     //设置过场动画
     winH: wx.getSystemInfoSync().windowHeight,
