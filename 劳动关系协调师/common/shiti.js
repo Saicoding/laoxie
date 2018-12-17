@@ -783,7 +783,9 @@ function changeSelectStatus(done_daan, shiti, ifSubmit) {
       shiti.isAnswer = true;
       break;
     case "多选题":
-      let answers = shiti.answer.split(""); //将“ABD” 这种字符串转为字符数组
+      console.log(shiti.answer)
+      let answers = shiti.answer.replace(/,|\s+/g,"");
+      answers = answers.split(""); //将“ABD” 这种字符串转为字符数组
       if (!ifSubmit) shiti.done_daan = done_daan; //已经做的选择
 
       for (let i = 0; i < answers.length; i++) {
@@ -1072,28 +1074,33 @@ function lianxiRestart(self) {
     self.setData({
       isLoaded: false
     })
-    app.post(API_URL, "action=SelectShiti&LoginRandom=" + LoginRandom + "&z_id=" + z_id + "&zcode=" + zcode + "&page=1", false, false, "", "", false, self).then((res) => {
+
+    console.log("action=SelectShiti&LoginRandom=" + LoginRandom + "&z_id=" + z_id + "&zcode=" + zcode + "&page=1")
+    app.post(API_URL, "action=SelectShiti&LoginRandom=" + LoginRandom + "&z_id=" + z_id + "&zcode=" + zcode + "&page=1" + "&tid=" + tid, false, false, "", "", false, self).then((res) => {
       pageArray.push(1);
 
-      let newWrongShitiArray = res.data.shiti;
+      let shitiArray1 = res.data.shiti;
+      let all_nums = res.data.all_nums;
+      console.log(all_nums)
+      initNewWrongArrayDoneAnswer(shitiArray1, 0); //将试题的所有done_daan置空
+      shitiArray = initShitiArray(shitiArray1, all_nums, 1);
 
-      initNewWrongArrayDoneAnswer(newWrongShitiArray, 0); //将试题的所有done_daan置空
+      console.log(shitiArray)
 
       //得到swiper数组
       let nextShiti = undefined; //后一题
-      let midShiti = shitiArray[0]; //中间题
+      let midShiti = shitiArray1[0]; //中间题
       let sliderShitiArray = [];
 
       initShiti(midShiti, self); //初始化试题对象
 
-
+      console.log(midShiti)
 
       if (shitiArray.length != 1) {
-        nextShiti = shitiArray[1];
+        nextShiti = shitiArray1[1];
         initShiti(nextShiti, self); //初始化试题对象
       }
 
-      circular = false //如果滑动后编号是1,或者最后一个就禁止循环滑动
       let myFavorite = midShiti.favorite;
 
       if (nextShiti != undefined) sliderShitiArray[1] = nextShiti;
@@ -1101,8 +1108,9 @@ function lianxiRestart(self) {
 
       self.setData({
         myCurrent: 0,
+        pageArray:[1],
         sliderShitiArray: sliderShitiArray, //滑动数组
-        shitiArray: shitiArray, //整节的试题数组
+        shitiArray: shitiArray1, //整节的试题数组
         doneAnswerArray: [], //已做答案数组
         myFavorite: myFavorite,
         circular: false,

@@ -68,6 +68,7 @@ Page({
           wx.navigateBack({})
 
           wx.removeStorageSync('user');
+          wx.removeStorageSync('first');
 
         } else if (res.cancel) {
 

@@ -219,6 +219,7 @@ Page({
     if (direction == "左滑") {
       px++;
       if (px % 10 >= 6) { //滑动到号大于7，这时判断有没有下一个page
+        console.log('ok')
         let nextPage = ((px - 1) - (px - 1) % 10) / 10 + 2;
 
         if (pageArray.indexOf(nextPage) == -1 && nextPage <= pageall) { //已渲染数组不包含下一页面
@@ -228,7 +229,6 @@ Page({
             pageArray: pageArray,
           })
 
-          console.log("action=SelectShiti&LoginRandom=" + LoginRandom + "&z_id=" + z_id + "&zcode=" + zcode + "&tid=" + tid + "&page=" + nextPage)
           app.post(API_URL, "action=SelectShiti&LoginRandom=" + LoginRandom + "&z_id=" + z_id + "&zcode=" + zcode + "&tid=" + tid + "&page=" + nextPage, false, true, "", true, self).then((res) => {
 
             let newWrongShitiArray = res.data.shiti;
@@ -631,7 +631,6 @@ Page({
       shitiArray: shitiArray
     })
 
-    console.log("action=FavoriteShiti&tid=" + shiti.id + "&LoginRandom=" + LoginRandom + "&zcode=" + zcode)
     app.post(API_URL, "action=FavoriteShiti&tid=" + shiti.id + "&LoginRandom=" + LoginRandom + "&zcode=" + zcode, false).then((res) => {
       console.log(res)
     })

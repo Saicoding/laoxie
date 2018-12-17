@@ -43,8 +43,10 @@ App({
             resolve(res);
           } else if(status == -2){//没有权限
             console.log('没有权限')
-            wx.navigateTo({
-              url: '/pages/pay/pay',
+            wx.showToast({
+              title: message,
+              icon: 'none',
+              duration: 3000
             })
           } else if(status == -5){//重复登录
             console.log('重复登录')
@@ -53,6 +55,12 @@ App({
                 isReLoad:true
               })
             }
+
+            wx.showToast({
+              title: message,
+              icon: 'none',
+              duration: 3000
+            })
 
             wx.navigateTo({
               url: '/pages/login1/login1?url=' + pageUrl+'&ifGoPage='+ifGoPage
@@ -90,7 +98,7 @@ App({
   },
 
   onLaunch: function() {
-    // wx.clearStorage();
+    wx.clearStorage();
     // wx.clearStorage("user")
 
   },
