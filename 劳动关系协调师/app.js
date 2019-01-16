@@ -50,7 +50,9 @@ App({
             })
           } else if(status == -5){//重复登录
             console.log('重复登录')
+
             if(self){//如果传了这个参数
+              console.log('设置了')
               self.setData({
                 isReLoad:true
               })
@@ -101,6 +103,8 @@ App({
     // wx.clearStorage();
     // wx.clearStorage("user")
   },
+  
   globalData: {
   }
+
 })

@@ -51,7 +51,6 @@ Page({
     let circular = false;
     let myFavorite = 0;
 
-    console.log("action=GetFavoriteShiti&kid=" + kid + "&Loginrandom=" + Loginrandom + "&zcode=" + zcode)
     app.post(API_URL, "action=GetFavoriteShiti&kid=" + kid + "&Loginrandom=" + Loginrandom + "&zcode=" + zcode, false, true, "", "", true, self).then((res) => {
       post.markOnload(options, px, circular, myFavorite, res, user, self)
       isFold = false;

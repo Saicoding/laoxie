@@ -342,12 +342,16 @@ Page({
 
     buttonClicked = false;
 
+    console.log(isReLoad)
+    console.log(first)
+    console.log(user)
+
     if ((isReLoad || first=="")&& user !="") { //如果已经登录
       let Loginrandom = user.Login_random == undefined ? "" : user.Login_random;
       let zcode = user.zcode == undefined ? "" : user.zcode;
 
       this.setWindowWidthHeightScrollHeight(); //获取窗口高度 宽度 并计算章节滚动条的高度
-
+      console.log("action=SelectZj&Loginrandom=" + Loginrandom + "&zcode=" + zcode)
       app.post(API_URL, "action=SelectZj&Loginrandom=" + Loginrandom + "&zcode=" + zcode, true, false, "请稍后", "", false, self).then((res) => { //得到上一步设置的题库下的所有章节
         this.setZhangjie(res.data.list); //得到当前题库的缓存,并设置变量:1.所有题库数组 2.要显示的题库id 3.要显示的题库index
         let zhangjie = res.data.zhangjielist //得到所有章节

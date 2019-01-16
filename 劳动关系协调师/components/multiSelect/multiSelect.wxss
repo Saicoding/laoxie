@@ -22,8 +22,8 @@
 .answer-img {
   display: float;
   float:left;
-  width:50rpx;
-  height:50rpx;
+  width:45rpx;
+  height:45rpx;
 }
 
 /* 答案选项的文字 */
