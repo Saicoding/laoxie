@@ -38,6 +38,7 @@ App({
         },
         success: function(res) { //服务器返回数据
           let status = res.data.status;
+          wx.hideLoading();
           let message = res.data.message;
           if (status == 1) {//请求成功
             resolve(res);
@@ -88,8 +89,6 @@ App({
               duration: 3000
             })
           }
-
-          wx.hideLoading();
         },
         error: function(e) {
           reject('网络出错');

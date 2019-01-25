@@ -1,7 +1,7 @@
 <view class="page-body">
   <!-- 默认图片 -->
   <view wx:hidden='{{isLiving}}' bindtap='goLiveDetail'>
-    <image class="live-show" src="{{img}}" mode="aspectFit"></image>
+    <image class="live-show" src="{{img}}" ></image>
     <view class="live-bottom" style=" background: linear-gradient(to top, black,rgb(126, 121, 121) );opacity: 0.2;"> </view>
     <view class="live-bottom">
       <view class="text1">{{title}}</view>
