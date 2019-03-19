@@ -5,7 +5,6 @@ let animate = require('animate.js')
  * 练习题
  */
 function zuotiOnload(options, px, circular, myFavorite, shitiArray, user, page, all_nums, pageall,self){
-  console.log(shitiArray)
   let username = user.username;
   let LoginRandom = user.Login_random;
   let zcode = user.zcode;

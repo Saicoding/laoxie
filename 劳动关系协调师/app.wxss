@@ -1,16 +1,118 @@
 /**app.wxss**/
-.container {
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: space-between;
-  padding: 200rpx 0;
-  box-sizing: border-box;
-} 
-::-webkit-scrollbar{
-width: 0;
-height: 0;
-color: transparent;
+
+
+/**app.wxss**/
+
+view,text,input,button,textarea,table{letter-spacing:0.6px;}
+
+/* 载入动画 */
+.loading-img{
+  display: block;
+  width:70rpx;
+  height:70rpx;
+  margin:200rpx auto;
+}
+/* 为空图片 */
+.hasNopage{
+  display: block;
+  width:300rpx;
+  height:300rpx;
+  margin: 0 auto;
+  margin-top:80rpx;
+}
+button::after {
+  border: none;
+}
+.b { font-weight: bold}
+.f11 {
+  font-size: 22rpx !important;
+}
+
+.f12 {
+  font-size: 24rpx !important;
+}
+
+.f13 {
+  font-size: 26rpx !important;
+}
+
+.f14 {
+  font-size: 28rpx !important;
+}
+
+.f15 {
+  font-size: 30rpx !important;
+}
+
+.f16 {
+  font-size: 32rpx !important;
+}
+.f18 {
+  font-size: 36rpx !important;
+}
+.fl {
+  float: left;
+}
+
+.fr {
+  float: right;
+}
+
+.tal {
+  text-align: left;
+}
+
+.tar {
+  text-align: right;
+}
+
+.tac {
+  text-align: center;
+}
+
+.radius50 {
+  border-radius: 50%;
+}
+
+.bg_color {
+  background-color: #fff;
+}
+
+.bg_color2 {
+  background-color: #f5f5f5;
+}
+
+.height10 {
+  height: 10px;
+}
+
+.height10.hui {
+  background: #f5f7f9;
+}
+
+.clear {
+  clear: both;
+  display: block;
+  width: 100%;
+}
+
+.rel {
+  position: relative;
+}
+
+.abs {
+  position: absolute;
+}
+.fix{ position: fixed}
+.hui {
+  color: #999;
+}
+.yihang {overflow: hidden; white-space: nowrap;text-overflow: ellipsis; width: 100%; display: block}
+
+/* 文字超行省略号显示 */
+.wp {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 

@@ -49,6 +49,15 @@ Page({
   },
 
   /**
+ * 导航到精品推荐
+ */
+  GOtuijian: function () {
+    wx.navigateTo({
+      url: '/pages/mine/tuijian/tuijian',
+    })
+  },
+
+  /**
    * 导航到消息页面
    */
   GOmessage: function() {

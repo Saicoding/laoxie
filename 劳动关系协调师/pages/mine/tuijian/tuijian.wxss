@@ -1,0 +1,18 @@
+/* pages/user/tuijian/tuijian.wxss */
+.list{ width: 90%; margin: 15px auto; margin-bottom: 0; padding:2%; border: 1px #eee solid; -webkit-box-shadow: 2px 2px 5px #eee;box-shadow: 2px 2px 5px #eee;}
+.imgs { text-align: center}
+.imgs image { width: 100%; max-height: 240rpx;}
+.info { height: 180rpx; overflow: hidden; line-height: 60rpx; margin: 20rpx 0; margin-bottom: 40rpx}
+
+.btn { width:140rpx; font-size: 25rpx; border: 1px rgb(250, 134, 114) solid; border-radius:4rpx; text-align: center; line-height:50rpx; color: rgb(250, 134, 114); background: #fff; }
+
+.loading-img{
+  display: block;
+  width: 120rpx;
+  height: 120rpx;
+  margin:400rpx auto;
+}
+
+.select1{
+  background: rgba(202, 202, 202,0.5);
+}

@@ -18,11 +18,20 @@
     <!-- 最底下关于房地产经纪人考试通 -->
 
     <view class="mycontainer">
-      <view class="line" hover-class='select' hover-stay-time='100'>
+      <view class="line" bindtap='GOset' hover-class='select' hover-stay-time='100'>
         <view class="block">
           <image class="left-img" src="/imgs/set.png" mode="aspectFit" style="width:40rpx;height:40rpx;margin-top:31rpx;margin-left:9rpx;"></image>
-          <view class="mytext" bindtap='GOset'>
+          <view class="mytext" >
             设置
+          </view>
+        </view>
+      </view>
+
+            <view class="line" bindtap='GOtuijian' hover-class='select' hover-stay-time='100'>
+        <view class="block">
+          <image class="left-img" src="/imgs/xiaochengxu.png" mode="aspectFit" style="width:40rpx;height:40rpx;margin-top:31rpx;margin-left:9rpx;"></image>
+          <view class="mytext" >
+            精品推荐
           </view>
         </view>
       </view>

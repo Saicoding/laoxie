@@ -1,0 +1,21 @@
+<!--pages/user/tuijian/tuijian.wxml-->
+<view wx:if="{{!isLoaded}}">
+  <image class="loading-img" src="/imgs/timg.gif"></image>
+</view>
+<view class="container" wx:if="{{isLoaded}}">
+  <!-- title":"房地产经纪人考试通","info":"这个是简介信息","nums":"6000","pic":"","appid":"wxf90a298a65cfaca8"} -->
+  <view wx:for="{{list}}" wx:for-item="list" wx:key="i" class='list'>
+    <view style='width:36%' class='fl imgs'>
+      <image src='{{list.pic?list.pic:"/images/course/kong@2x.png"}}' data-src='{{list.pic?list.pic:"/images/course/kong@2x.png"}}' bindtap='previewImage' mode='widthfix'></image>
+      <text class='f14 yihang'>{{list.title}}</text>
+    </view>
+    <view style='width:60%' class='fr cont'>
+      <view class='f15 hui info'>{{list.info}}</view>
+     
+      <text class='f12' style='color:#bbb'>累计帮助学员{{list.nums}}+</text>
+      <view class='btn fr' data-id='{{list.appid}}' bindtap='toapp' hover-class='select1' hover-stay-time='500'>立即查看</view>
+      <view class='clear'></view>
+    </view>
+    <view class='clear height10'></view>
+  </view>
+</view>

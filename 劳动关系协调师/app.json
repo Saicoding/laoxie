@@ -7,7 +7,8 @@
     "pages/live/live",
     "pages/video/video",
     "pages/noPage/noPage",
-    "pages/tiku/zuoti/zuoti"
+    "pages/tiku/zuoti/zuoti",
+    "pages/mine/tuijian/tuijian"
   ],
   "window": {
     "backgroundTextStyle": "light",
@@ -44,5 +45,11 @@
         "text": "我的"
       }
     ]
-  }
+  },
+  "navigateToMiniProgramAppIdList": [
+    "wxf90a298a65cfaca8",
+    "wxfc4ecbaf91acfaf6",
+    "wx274bc5c5c5ce0434",
+    "wx1264a65218ad1fab"
+  ]
 }
