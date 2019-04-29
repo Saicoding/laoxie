@@ -85,7 +85,7 @@ Page({
 
     app.post(API_URL, "action=Login&username=" + username + "&pwd=" + pwd,true,false,"登录中","").then((res) => {
       let user = res.data.list[0];
-
+      console.log(user)
       wx.setStorage({
         key: 'user',
         data: user,
